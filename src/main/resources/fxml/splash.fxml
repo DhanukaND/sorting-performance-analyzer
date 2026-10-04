@@ -10,8 +10,8 @@
 <?import javafx.scene.layout.HBox?>
 
 <StackPane xmlns:fx="http://javafx.com/fxml"
-           style="-fx-background-color: linear-gradient(to bottom right, #0B1020, #172554, #312E81);
-                  -fx-background-radius: 25;">
+           style="-fx-background-radius: 25;"
+           styleClass="splash-root">
 
     <VBox StackPane.alignment="CENTER"
           alignment="CENTER"
