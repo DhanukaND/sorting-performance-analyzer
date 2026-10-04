@@ -10,7 +10,8 @@
 <?import javafx.scene.layout.HBox?>
 
 <StackPane xmlns:fx="http://javafx.com/fxml"
-           style="-fx-background-color: #0F172A;">
+           style="-fx-background-color: linear-gradient(to bottom right, #0B1020, #172554, #312E81);
+                  -fx-background-radius: 25;">
 
     <VBox StackPane.alignment="CENTER"
           alignment="CENTER"
@@ -23,14 +24,20 @@
             </image>
         </ImageView>
 
-        <Label text="SortLab"
-               style="-fx-text-fill: white;
-                      -fx-font-size: 32px;
-                      -fx-font-weight: bold;"/>
+        <HBox alignment="CENTER">
 
-        <Label text="Sorting Algorithm Performance Analyzer"
-               style="-fx-text-fill: #CBD5E1;
-                      -fx-font-size: 13px;"/>
+            <Label text="Sort"
+                   style="-fx-text-fill: white;
+                  -fx-font-size: 32px;
+                  -fx-font-weight: bold;"/>
+
+            <Label text="Lab"
+                   style="-fx-text-fill: #38BDF8;
+                  -fx-font-size: 32px;
+                  -fx-font-weight: bold;"/>
+
+        </HBox>
+
     </VBox>
 
     <HBox StackPane.alignment="BOTTOM_LEFT"
@@ -46,6 +53,16 @@
         <Label text="Application Starting..."
                style="-fx-text-fill: #94A3B8;
                       -fx-font-size: 12px;"/>
+    </HBox>
+
+    <HBox StackPane.alignment="BOTTOM_RIGHT"
+          alignment="CENTER_RIGHT"
+          maxHeight="50"
+          style="-fx-padding: 0 20 20 0;">
+
+        <Label text="v1.0.0"
+               style="-fx-text-fill: #94A3B8;
+                      -fx-font-size: 11px;"/>
     </HBox>
 
 </StackPane>
