@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.HBox?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           style="-fx-background-color: #0F172A;">
+
+    <VBox StackPane.alignment="CENTER"
+          alignment="CENTER"
+          spacing="5">
+
+        <ImageView fitWidth="130"
+                   preserveRatio="true">
+            <image>
+                <Image url="@../images/sortlab-logo.png"/>
+            </image>
+        </ImageView>
+
+        <Label text="SortLab"
+               style="-fx-text-fill: white;
+                      -fx-font-size: 32px;
+                      -fx-font-weight: bold;"/>
+
+        <Label text="Sorting Algorithm Performance Analyzer"
+               style="-fx-text-fill: #CBD5E1;
+                      -fx-font-size: 13px;"/>
+    </VBox>
+
+    <HBox StackPane.alignment="BOTTOM_LEFT"
+          alignment="CENTER_LEFT"
+          maxWidth="240"
+          maxHeight="50"
+          spacing="10"
+          style="-fx-padding: 0 0 20 20;">
+
+        <ProgressIndicator prefWidth="20"
+                           prefHeight="20"/>
+
+        <Label text="Application Starting..."
+               style="-fx-text-fill: #94A3B8;
+                      -fx-font-size: 12px;"/>
+    </HBox>
+
+</StackPane>
