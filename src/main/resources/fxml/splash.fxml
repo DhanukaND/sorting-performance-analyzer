@@ -11,7 +11,7 @@
 
 <StackPane xmlns:fx="http://javafx.com/fxml"
            style="-fx-background-radius: 25;"
-           styleClass="splash-root">
+           styleClass="splash-background">
 
     <VBox StackPane.alignment="CENTER"
           alignment="CENTER"
