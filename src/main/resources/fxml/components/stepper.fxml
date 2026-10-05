@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.geometry.Insets?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           alignment="TOP_CENTER"
+           styleClass="stepper"
+           fx:controller="com.sortinganalyzer.ui.controller.StepperController">
+
+    <!-- Connector line (behind the circles) -->
+    <Region styleClass="step-line" prefWidth="600" maxWidth="600"
+            prefHeight="2" minHeight="2" maxHeight="2">
+        <StackPane.margin>
+            <Insets top="19"/>
+        </StackPane.margin>
+    </Region>
+
+    <HBox alignment="TOP_CENTER" spacing="60">
+        <VBox styleClass="step-box">
+            <StackPane styleClass="step-circle-holder">
+                <Circle fx:id="circle1"/>
+                <Label fx:id="number1" text="1"/>
+            </StackPane>
+            <Label fx:id="label1" text="Select CSV File"/>
+        </VBox>
+
+        <VBox styleClass="step-box">
+            <StackPane styleClass="step-circle-holder">
+                <Circle fx:id="circle2"/>
+                <Label fx:id="number2" text="2"/>
+            </StackPane>
+            <Label fx:id="label2" text="Select Column"/>
+        </VBox>
+
+        <VBox styleClass="step-box">
+            <StackPane styleClass="step-circle-holder">
+                <Circle fx:id="circle3"/>
+                <Label fx:id="number3" text="3"/>
+            </StackPane>
+            <Label fx:id="label3" text="Run Algorithms"/>
+        </VBox>
+
+        <VBox styleClass="step-box">
+            <StackPane styleClass="step-circle-holder">
+                <Circle fx:id="circle4"/>
+                <Label fx:id="number4" text="4"/>
+            </StackPane>
+            <Label fx:id="label4" text="View Results"/>
+        </VBox>
+    </HBox>
+</StackPane>
