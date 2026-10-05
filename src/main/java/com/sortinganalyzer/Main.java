@@ -24,19 +24,24 @@ public class Main extends Application {
         splashStage.initStyle(StageStyle.TRANSPARENT);
 
         Scene splashScene = new Scene(splashRoot, 300, 350);
+
+        splashScene.getStylesheets().add(
+                getClass().getResource("/css/style.css").toExternalForm()
+        );
+
         splashScene.setFill(Color.TRANSPARENT);
 
         splashStage.setScene(splashScene);
         splashStage.show();
         splashStage.centerOnScreen();
 
-        // Show splash for 1.5 seconds
-        PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
+        // Show splash for 0.7 seconds
+        PauseTransition pause = new PauseTransition(Duration.seconds(0.7));
 
         pause.setOnFinished(event -> {
             try {
                 Parent mainRoot = FXMLLoader.load(
-                        getClass().getResource("/fxml/file-selection.fxml")
+                        getClass().getResource("/fxml/main-layout.fxml")
                 );
 
                 Stage mainStage = new Stage();
