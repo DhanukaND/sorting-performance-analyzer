@@ -1,8 +1,169 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.geometry.Insets?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
-<StackPane xmlns:fx="http://javafx.com/fxml">
-    <Label text="Select CSV File"/>
+<StackPane xmlns:fx="http://javafx.com/fxml"
+           alignment="TOP_CENTER"
+           fx:controller="com.sortinganalyzer.ui.controller.FileSelectionController">
+
+    <padding>
+        <Insets top="30" right="40" bottom="20" left="40"/>
+    </padding>
+
+    <!-- CSV file selection area -->
+    <StackPane alignment="CENTER"
+               style="-fx-background-color: white;
+                      -fx-background-radius: 15;
+                      -fx-padding: 25;
+                      -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 15, 0, 0, 4);"
+               maxWidth="800"
+               maxHeight="400">
+
+        <HBox alignment="TOP_LEFT" spacing="10">
+
+            <FontIcon iconLiteral="fas-folder-open"
+                      iconSize="30"
+                      iconColor="#2563EB"/>
+
+            <VBox>
+                <Label text="Select CSV File"
+                       style="-fx-text-fill: black;
+                              -fx-font-weight: bold;
+                              -fx-font-size: 20px"/>
+
+                <Label text="Choose a csv file containing your dataset to begin"
+                       style="-fx-text-fill: black;
+                              -fx-font-size: 12px"/>
+            </VBox>
+        </HBox>
+
+        <StackPane fx:id="dropZone"
+                   alignment="CENTER"
+                   maxWidth="-Infinity"
+                   maxHeight="-Infinity"
+                   StackPane.alignment="BOTTOM_CENTER"
+                   onDragOver="#handleDragOver"
+                   onDragDropped="#handleDragDropped">
+
+            <StackPane.margin>
+                <Insets top="50" bottom="25"/>
+            </StackPane.margin>
+
+            <Rectangle width="700"
+                       height="250"
+                       fill="#38BDF808"
+                       stroke="#2563EB40"
+                       strokeWidth="2"
+                       strokeDashArray="8.0, 6.0"
+                       arcWidth="20"
+                       arcHeight="20"/>
+
+            <!-- STATE 1: no file yet -->
+            <VBox fx:id="emptyState" alignment="CENTER"
+                  spacing="6">
+                <StackPane maxWidth="-Infinity" maxHeight="-Infinity">
+
+                    <FontIcon iconLiteral="far-file"
+                              iconSize="50"
+                              iconColor="#1E3A8A60"/>
+
+                    <!-- CSV badge -->
+                    <Label text="CSV"
+                           StackPane.alignment="BOTTOM_RIGHT"
+                           translateX="8"
+                           translateY="4"
+                           style="-fx-background-color: #2563EB;
+                              -fx-text-fill: white;
+                              -fx-font-size: 11px;
+                              -fx-font-weight: bold;
+                              -fx-background-radius: 4;
+                              -fx-padding: 2 6 2 6;"/>
+                </StackPane>
+
+                <Label text="Drag and drop your CSV file here"
+                       style="-fx-font-size: 18px;
+                              -fx-font-weight: bold"/>
+
+                <Label text="or click the button below to browse"
+                       style="-fx-font-size: 12px;"/>
+
+                <Button text="Browse Files..."
+                        onAction="#handleBrowse"
+                        prefWidth="140"
+                        prefHeight="40"
+                        styleClass="browse-button">
+
+                    <VBox.margin>
+                        <Insets top="15"
+                                right="0"
+                                bottom="15"
+                                left="0"/>
+                    </VBox.margin>
+
+                    <graphic>
+                        <FontIcon iconLiteral="fas-folder-open"
+                                  iconSize="16"
+                                  iconColor="white"/>
+                    </graphic>
+                </Button>
+
+            </VBox>
+
+            <!-- STATE 2: file selected -->
+            <VBox fx:id="selectedState" alignment="CENTER" spacing="6"
+                  visible="false" managed="false">
+
+                <StackPane maxWidth="-Infinity" maxHeight="-Infinity">
+                    <FontIcon iconLiteral="far-file" iconSize="50" iconColor="#64748B"/>
+                    <Label text="CSV"
+                           StackPane.alignment="BOTTOM_RIGHT"
+                           translateX="8"
+                           translateY="4"
+                           style="-fx-background-color: #2563EB;
+                          -fx-text-fill: white;
+                          -fx-font-size: 11px;
+                          -fx-font-weight: bold;
+                          -fx-background-radius: 4;
+                          -fx-padding: 2 6 2 6;"/>
+                </StackPane>
+
+                <Label fx:id="fileNameLabel"
+                       style="-fx-font-size: 18px; -fx-font-weight: bold"/>
+
+                <Label fx:id="fileSizeLabel"
+                       style="-fx-font-size: 12px; -fx-text-fill: #475569;"/>
+
+                <HBox alignment="CENTER" spacing="10">
+                    <VBox.margin>
+                        <Insets top="15" bottom="15"/>
+                    </VBox.margin>
+
+                    <Button text="Remove File"
+                            onAction="#handleRemove"
+                            styleClass="remove-file-button">
+                        <graphic>
+                            <FontIcon iconLiteral="far-trash-alt"
+                                      iconSize="13"/>
+                        </graphic>
+                    </Button>
+
+                    <Button text="Choose a different file"
+                            onAction="#handleBrowse"
+                            styleClass="change-file-button">
+
+                        <graphic>
+                            <FontIcon iconLiteral="fas-folder-open"
+                                      iconSize="13"/>
+                        </graphic>
+                    </Button>
+                </HBox>
+            </VBox>
+
+        </StackPane>
+
+    </StackPane>
 </StackPane>
