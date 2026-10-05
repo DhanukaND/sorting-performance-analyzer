@@ -1,0 +1,223 @@
+.splash-background {
+    -fx-background-image: url("../images/splash-background.png");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+
+.screen-background {
+    -fx-background-image: url("../images/screen-background.png");
+    -fx-background-size: cover;
+    -fx-background-position: center;
+    -fx-background-repeat: no-repeat;
+}
+
+/* ========= CSS for Top Stepper ========*/
+/* Container */
+.stepper {
+    -fx-padding: 15 40 6 40;
+}
+
+/* One step column */
+.step-box {
+    -fx-alignment: TOP_CENTER;
+    -fx-spacing: 4;
+    -fx-pref-width: 140;
+    -fx-min-width: 140;
+    -fx-max-width: 140;
+}
+
+/* Fixed 40x40 box that holds circle + number */
+.step-circle-holder {
+    -fx-pref-width: 40;
+    -fx-pref-height: 40;
+    -fx-min-width: 40;
+    -fx-min-height: 40;
+    -fx-max-width: 40;
+    -fx-max-height: 40;
+}
+
+/* Connector line */
+.step-line {
+    -fx-background-color: #CBD5E1;
+}
+
+/* Active step */
+.step-circle-active {
+    -fx-fill: #2563EB;
+    -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.35), 8, 0, 0, 2);
+}
+
+.step-number-active {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.step-label-active {
+    -fx-text-fill: #2563EB;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+/* Inactive steps */
+.step-circle {
+    -fx-fill: #E2E8F0;
+    -fx-stroke: #CBD5E1;
+    -fx-stroke-width: 2;
+}
+
+.step-number {
+    -fx-text-fill: #475569;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.step-circle-done {
+    -fx-fill: #93C5FD;
+    -fx-stroke: #93C5FD;
+    -fx-stroke-width: 2;
+}
+.step-number-done {
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.step-label-done  {
+    -fx-text-fill: #1E3A8A;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+/* =========================================*/
+
+
+/* ========= CSS for Bottom Nav Buttons ========*/
+/* Primary (Next) */
+.nav-button-primary {
+    -fx-background-color: #2563EB;
+    -fx-graphic-text-gap: 8;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-padding: 10 28 10 28;
+    -fx-cursor: hand;
+}
+.nav-button-primary:hover {
+    -fx-background-color: #1D4ED8;
+}
+
+.nav-button-primary:pressed {
+    -fx-background-color: #1E40AF;
+}
+
+.nav-button-primary:disabled {
+    -fx-background-color: #CBD5E1;
+    -fx-text-fill: #94A3B8;
+    -fx-cursor: default;
+}
+
+.nav-button-primary .ikonli-font-icon {
+    -fx-icon-color: white;
+}
+
+.nav-button-primary:disabled .ikonli-font-icon {
+    -fx-icon-color: #94A3B8;
+}
+
+/* Secondary (Back) */
+.nav-button-secondary {
+    -fx-background-color: white;
+    -fx-graphic-text-gap: 8;
+    -fx-text-fill: #475569;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-border-color: #CBD5E1;
+    -fx-border-radius: 8;
+    -fx-border-width: 1.5;
+    -fx-padding: 9 24 9 24;
+    -fx-cursor: hand;
+}
+.nav-button-secondary:hover {
+    -fx-background-color: #F1F5F9;
+}
+/* =========================================*/
+
+
+/* ========= CSS for FILE SELECTION ========*/
+
+/* Browse Button */
+.browse-button {
+    -fx-background-color: #2563EB;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-cursor: hand;
+}
+
+.browse-button:hover {
+    -fx-background-color: #1D4ED8;
+}
+
+.step-label {
+    -fx-text-fill: #475569;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.file-icon {
+    -fx-icon-color: #2563EB;
+}
+
+/* Choose a different file */
+.change-file-button {
+    -fx-background-color: white;
+    -fx-text-fill: #2563EB;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-border-color: #93C5FD;
+    -fx-border-radius: 8;
+    -fx-border-width: 1.5;
+    -fx-padding: 8 18 8 18;
+    -fx-graphic-text-gap: 8;
+    -fx-cursor: hand;
+}
+.change-file-button:hover {
+    -fx-background-color: #EFF6FF;
+}
+.change-file-button:pressed {
+    -fx-background-color: #DBEAFE;
+}
+.change-file-button .ikonli-font-icon {
+    -fx-icon-color: #2563EB;
+}
+
+/* Remove file */
+.remove-file-button {
+    -fx-background-color: white;
+    -fx-text-fill: #DC2626;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 8;
+    -fx-border-color: #FCA5A5;
+    -fx-border-radius: 8;
+    -fx-border-width: 1.5;
+    -fx-padding: 8 18 8 18;
+    -fx-graphic-text-gap: 8;
+    -fx-cursor: hand;
+}
+.remove-file-button:hover {
+    -fx-background-color: #FEF2F2;
+}
+.remove-file-button:pressed {
+    -fx-background-color: #FEE2E2;
+}
+.remove-file-button .ikonli-font-icon {
+    -fx-icon-color: #DC2626;
+}
+
+/* ========================================*/
