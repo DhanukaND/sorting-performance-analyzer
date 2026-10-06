@@ -1,18 +1,20 @@
 package com.sortinganalyzer.ui.controller;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableBooleanValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
-
 import java.io.File;
+import java.util.Objects;
+import javafx.scene.text.Text;
 
 public class FileSelectionController implements WizardStep {
 
@@ -21,7 +23,8 @@ public class FileSelectionController implements WizardStep {
     @FXML private Label fileNameLabel;
     @FXML private Label fileSizeLabel;
 
-    private final ObjectProperty<File> selectedFile = new SimpleObjectProperty<>();
+    private final ObjectProperty<File> selectedFile = WizardState.get().selectedFileProperty();
+    private final Tooltip fileNameTooltip = new Tooltip();
 
     @FXML
     private void initialize() {
@@ -32,13 +35,24 @@ public class FileSelectionController implements WizardStep {
         selectedState.visibleProperty().bind(selectedFile.isNotNull());
         selectedState.managedProperty().bind(selectedState.visibleProperty());
 
-        // fill in the details whenever the file changes
-        selectedFile.addListener((obs, old, file) -> {
-            if (file != null) {
-                fileNameLabel.setText(file.getName());
-                fileSizeLabel.setText(formatSize(file.length()));
-            }
-        });
+        // labels follow the file, including when the screen is reloaded
+        fileNameLabel.textProperty().bind(Bindings.createStringBinding(
+                () -> selectedFile.get() == null ? "" : selectedFile.get().getName(),
+                selectedFile));
+
+        fileSizeLabel.textProperty().bind(Bindings.createStringBinding(
+                () -> selectedFile.get() == null ? "" : formatSize(selectedFile.get().length()),
+                selectedFile));
+
+        // tooltip: wraps long text and always shows the full file name
+        fileNameTooltip.setWrapText(true);
+        fileNameTooltip.setMaxWidth(400);
+        fileNameTooltip.textProperty().bind(fileNameLabel.textProperty());
+
+        // re-check whenever the name or the font changes
+        fileNameLabel.textProperty().addListener((obs, old, text) -> updateFileNameTooltip());
+        fileNameLabel.fontProperty().addListener((obs, old, font) -> updateFileNameTooltip());
+        updateFileNameTooltip();
     }
 
     // ---------- WizardStep ----------
@@ -61,13 +75,13 @@ public class FileSelectionController implements WizardStep {
         File file = chooser.showOpenDialog(source.getScene().getWindow());
 
         if (file != null) {
-            selectedFile.set(file);
+            setFile(file);
         }
     }
 
     @FXML
     private void handleRemove() {
-        selectedFile.set(null);
+        setFile(null);
     }
 
     @FXML
@@ -86,7 +100,7 @@ public class FileSelectionController implements WizardStep {
             File file = event.getDragboard().getFiles().getFirst();
 
             if (file.getName().toLowerCase().endsWith(".csv")) {
-                selectedFile.set(file);
+                setFile(file);
                 success = true;
             }
         }
@@ -95,13 +109,32 @@ public class FileSelectionController implements WizardStep {
         event.consume();
     }
 
-    public File getSelectedFile() {
-        return selectedFile.get();
+    private void setFile(File file) {
+        if (!Objects.equals(selectedFile.get(), file)) {
+            WizardState.get().selectedColumnProperty().set(null);
+        }
+        selectedFile.set(file);
     }
 
     private String formatSize(long bytes) {
         if (bytes < 1024) return bytes + " B";
         if (bytes < 1024 * 1024) return String.format("%.1f KB", bytes / 1024.0);
         return String.format("%.1f MB", bytes / (1024.0 * 1024.0));
+    }
+
+    private void updateFileNameTooltip() {
+        String name = fileNameLabel.getText();
+
+        if (name == null || name.isEmpty()) {
+            fileNameLabel.setTooltip(null);
+            return;
+        }
+
+        Text measure = new Text(name);
+        measure.setFont(fileNameLabel.getFont());
+        double textWidth = measure.getLayoutBounds().getWidth();
+
+        boolean truncated = textWidth > fileNameLabel.getMaxWidth();
+        fileNameLabel.setTooltip(truncated ? fileNameTooltip : null);
     }
 }

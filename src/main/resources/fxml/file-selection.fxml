@@ -132,10 +132,13 @@
                 </StackPane>
 
                 <Label fx:id="fileNameLabel"
+                       textOverrun="CENTER_ELLIPSIS"
+                       alignment="CENTER"
+                       maxWidth="560"
                        style="-fx-font-size: 18px; -fx-font-weight: bold"/>
 
                 <Label fx:id="fileSizeLabel"
-                       style="-fx-font-size: 12px; -fx-text-fill: #475569;"/>
+                       style="-fx-font-size: 13px; -fx-text-fill: #475569;"/>
 
                 <HBox alignment="CENTER" spacing="10">
                     <VBox.margin>
