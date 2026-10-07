@@ -221,3 +221,187 @@
 }
 
 /* ========================================*/
+
+
+/* ========= CSS for COLUMN SELECTION ========*/
+
+/* ===== Column combo box ===== */
+
+/* the closed box */
+.column-combo {
+    -fx-background-color: #EFF6FF;           /* light blue */
+    -fx-background-insets: 0;
+    -fx-background-radius: 8;
+    -fx-border-color: #2563EB;               /* blue border */
+    -fx-border-width: 1.5;
+    -fx-border-radius: 4;
+    -fx-padding: 2 4 2 4;
+    -fx-cursor: hand;
+}
+
+.column-combo:hover {
+    -fx-background-color: #DBEAFE;
+}
+
+/* remove the default focus ring and keep the blue border */
+.column-combo:focused {
+    -fx-background-color: #EFF6FF;
+    -fx-background-insets: 0;
+    -fx-background-radius: 8;
+}
+
+/* selected text and prompt text */
+.column-combo .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: #1E3A8A;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+/* the arrow button area */
+.column-combo .arrow-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0 8 8 0;
+}
+.column-combo .arrow {
+    -fx-background-color: #2563EB;           /* blue arrow */
+}
+
+/* the dropdown list (white background) */
+.column-combo .list-view {
+    -fx-background-color: white;
+    -fx-border-color: #2563EB;
+    -fx-border-width: 1.5;
+}
+
+.column-combo .list-view .list-cell {
+    -fx-background-color: white;
+    -fx-text-fill: #1E293B;
+    -fx-padding: 8 12 8 12;
+}
+
+.column-combo .list-view .list-cell:hover {
+    -fx-background-color: #EFF6FF;
+}
+
+.column-combo .list-view .list-cell:selected {
+    -fx-background-color: #2563EB;
+    -fx-text-fill: white;
+}
+
+/* ===== Dataset preview table ===== */
+.preview-table {
+    -fx-background-color: white;
+    -fx-background-insets: 0;
+    -fx-background-radius: 8;
+    -fx-border-color: #E2E8F0;
+    -fx-border-radius: 8;
+    -fx-padding: 0;
+    -fx-table-cell-border-color: #EDF2F7;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+/* header bar */
+.preview-table .column-header-background {
+    -fx-background-color: #EEF4FF;
+    -fx-background-radius: 8 8 0 0;
+}
+
+.preview-table .column-header,
+.preview-table .filler {
+    -fx-background-color: transparent;
+    -fx-size: 38;
+    -fx-border-color: transparent #DCE6F5 #CBD5E1 transparent;
+    -fx-border-width: 0 1 1 0;
+}
+
+.preview-table .column-header .label {
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 0 0 0 12;
+    -fx-text-fill: #1E3A8A;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+/* rows */
+.preview-table .table-row-cell {
+    -fx-cell-size: 32px;
+    -fx-background-color: white;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent transparent #EDF2F7 transparent;
+}
+
+.preview-table .table-row-cell:odd {
+    -fx-background-color: #F8FAFC;
+}
+
+.preview-table .table-row-cell:hover {
+    -fx-background-color: #EFF6FF;
+}
+
+.preview-table .table-row-cell:selected {
+    -fx-background-color: #DBEAFE;
+}
+
+/* cells */
+.preview-table .table-cell {
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 0 12 0 12;
+    -fx-text-fill: #334155;
+    -fx-font-size: 13px;
+    -fx-text-overrun: ellipsis;
+    -fx-background-insets: 0;
+}
+
+.preview-table .table-row-cell:selected .table-cell {
+    -fx-text-fill: #1E3A8A;
+}
+
+/* empty table message */
+.preview-table .placeholder .label {
+    -fx-text-fill: #94A3B8;
+    -fx-font-size: 13px;
+}
+
+/* slim rounded scrollbars */
+.preview-table .scroll-bar {
+    -fx-background-color: transparent;
+    -fx-padding: 2;
+}
+
+.preview-table .scroll-bar:vertical   { -fx-pref-width: 12; }
+.preview-table .scroll-bar:horizontal { -fx-pref-height: 12; }
+
+.preview-table .scroll-bar .track {
+    -fx-background-color: #F1F5F9;
+    -fx-background-radius: 6;
+    -fx-border-color: transparent;
+}
+
+.preview-table .scroll-bar .thumb {
+    -fx-background-color: #CBD5E1;
+    -fx-background-radius: 6;
+}
+
+.preview-table .scroll-bar .thumb:hover,
+.preview-table .scroll-bar .thumb:pressed {
+    -fx-background-color: #94A3B8;
+}
+
+/* hide the arrow buttons */
+.preview-table .scroll-bar .increment-button,
+.preview-table .scroll-bar .decrement-button {
+    -fx-padding: 0;
+    -fx-background-color: transparent;
+}
+
+.preview-table .scroll-bar .increment-arrow,
+.preview-table .scroll-bar .decrement-arrow {
+    -fx-padding: 0;
+    -fx-shape: " ";
+}
+
+.preview-table .corner {
+    -fx-background-color: transparent;
+}
