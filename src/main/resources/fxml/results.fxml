@@ -1,8 +1,127 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
 <StackPane xmlns:fx="http://javafx.com/fxml"
-           alignment="TOP_CENTER"
-           fx:controller="com.sortinganalyzer.ui.controller.ResultsController">
+           alignment="CENTER"
+           styleClass="results-screen"
+           fx:controller="com.sortinganalyzer.ui.ResultController">
+    <ScrollPane fitToWidth="true"
+                hbarPolicy="NEVER"
+                styleClass="results-scroll">
+        <content>
+            <StackPane alignment="CENTER">
+              <VBox maxWidth="980" spacing="14" styleClass="results-content">
+                <padding>
+                    <Insets top="24" right="28" bottom="22" left="28"/>
+                </padding>
+
+                <HBox alignment="CENTER_LEFT" spacing="18" styleClass="results-heading">
+                    <StackPane minWidth="52" minHeight="52"
+                               maxWidth="52" maxHeight="52"
+                               styleClass="results-heading-icon">
+                        <FontIcon iconLiteral="fas-chart-bar" iconSize="29"/>
+                    </StackPane>
+                    <VBox spacing="3">
+                        <Label text="View Results" styleClass="results-title"/>
+                        <Label text="Compare the performance of sorting algorithms based on execution time."
+                               styleClass="results-subtitle"/>
+                    </VBox>
+                </HBox>
+
+                <VBox spacing="12" styleClass="results-card">
+                    <HBox alignment="CENTER_LEFT" spacing="14">
+                        <StackPane minWidth="48" minHeight="48"
+                                   maxWidth="48" maxHeight="48"
+                                   styleClass="section-icon-blue">
+                            <FontIcon iconLiteral="fas-trophy" iconSize="25"/>
+                        </StackPane>
+                        <VBox spacing="2">
+                            <Label text="Best Performing Algorithm" styleClass="section-title"/>
+                            <Label text="The algorithm with the lowest average execution time."
+                                   styleClass="section-subtitle"/>
+                        </VBox>
+                    </HBox>
+
+                    <HBox alignment="CENTER_LEFT" spacing="38" styleClass="best-result-card">
+                        <FontIcon iconLiteral="fas-trophy" iconSize="30" styleClass="best-result-icon"/>
+                        <VBox spacing="2" minWidth="150">
+                            <Label text="Best Algorithm" styleClass="metric-label"/>
+                            <Label fx:id="bestAlgorithmNameLabel" text="—" styleClass="metric-value"/>
+                        </VBox>
+                        <Region minWidth="1" prefWidth="1" maxWidth="1"
+                                minHeight="38" styleClass="metric-divider"/>
+                        <VBox spacing="2">
+                            <Label text="Average Execution Time" styleClass="metric-label"/>
+                            <Label fx:id="bestAlgorithmTimeLabel" text="—" styleClass="metric-value"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+
+                <VBox spacing="8" styleClass="results-card chart-card">
+                    <Label text="Performance Score Chart" styleClass="section-title"/>
+                    <BarChart fx:id="performanceChart" animated="false"
+                              legendVisible="false" prefHeight="230"
+                              styleClass="performance-chart">
+                        <xAxis>
+                            <CategoryAxis label="Algorithm"/>
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis label="Average execution time (ms)" forceZeroInRange="true"/>
+                        </yAxis>
+                    </BarChart>
+                </VBox>
+
+                <VBox spacing="12" styleClass="results-card">
+                    <HBox alignment="CENTER_LEFT" spacing="14">
+                        <StackPane minWidth="48" minHeight="48"
+                                   maxWidth="48" maxHeight="48"
+                                   styleClass="section-icon-blue">
+                            <FontIcon iconLiteral="fas-table" iconSize="24"/>
+                        </StackPane>
+                        <VBox spacing="2">
+                            <Label text="Algorithm Performance Results" styleClass="section-title"/>
+                            <Label text="Execution time for each algorithm based on the selected benchmark runs."
+                                   styleClass="section-subtitle"/>
+                        </VBox>
+                    </HBox>
+
+                    <TableView fx:id="performanceTable"
+                               prefHeight="220"
+                               minHeight="220"
+                               styleClass="results-table">
+                        <placeholder>
+                            <Label text="No performance results available."/>
+                        </placeholder>
+                        <columns>
+                            <TableColumn fx:id="algoNameColumn" text="Algorithm" prefWidth="155"/>
+                            <TableColumn text="Execution Time (ms)" prefWidth="580">
+                                <columns>
+                                    <TableColumn fx:id="run1Column" text="Run 1" prefWidth="95"/>
+                                    <TableColumn fx:id="run2Column" text="Run 2" prefWidth="95"/>
+                                    <TableColumn fx:id="run3Column" text="Run 3" prefWidth="95"/>
+                                    <TableColumn fx:id="avgColumn" text="Average" prefWidth="105"/>
+                                    <TableColumn fx:id="minColumn" text="Min" prefWidth="95"/>
+                                    <TableColumn fx:id="maxColumn" text="Max" prefWidth="95"/>
+                                </columns>
+                            </TableColumn>
+                        </columns>
+                    </TableView>
+                </VBox>
+              </VBox>
+            </StackPane>
+        </content>
+    </ScrollPane>
 </StackPane>

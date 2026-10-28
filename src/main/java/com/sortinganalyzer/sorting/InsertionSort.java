@@ -1,17 +1,28 @@
 package com.sortinganalyzer.sorting;
 
-public final class InsertionSort implements Sorter {
+public class InsertionSort {
 
-    @Override
+    public void sort(int[] values) {
+        for (int i = 1; i < values.length; i++) {
+            int key = values[i];
+            int j = i - 1;
+            while (j >= 0 && values[j] > key) {
+                values[j + 1] = values[j];
+                j--;
+            }
+            values[j + 1] = key;
+        }
+    }
+
     public void sort(double[] values) {
         for (int i = 1; i < values.length; i++) {
-            double value = values[i];
-            int position = i - 1;
-            while (position >= 0 && values[position] > value) {
-                values[position + 1] = values[position];
-                position--;
+            double key = values[i];
+            int j = i - 1;
+            while (j >= 0 && values[j] > key) {
+                values[j + 1] = values[j];
+                j--;
             }
-            values[position + 1] = value;
+            values[j + 1] = key;
         }
     }
 }

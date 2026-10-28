@@ -1,42 +1,72 @@
 package com.sortinganalyzer.sorting;
 
-public final class MergeSort implements Sorter {
+public class MergeSort {
 
-    @Override
+    public void sort(int[] values) {
+        if (values == null || values.length < 2) return;
+        int[] helper = new int[values.length];
+        mergeSort(values, helper, 0, values.length - 1);
+    }
+
     public void sort(double[] values) {
-        if (values.length < 2) {
-            return;
-        }
-        double[] buffer = new double[values.length];
-        mergeSort(values, buffer, 0, values.length - 1);
+        if (values == null || values.length < 2) return;
+        double[] helper = new double[values.length];
+        mergeSort(values, helper, 0, values.length - 1);
     }
 
-    private void mergeSort(double[] values, double[] buffer, int left, int right) {
-        if (left >= right) {
-            return;
-        }
+    private void mergeSort(int[] values, int[] helper, int left, int right) {
+        if (left >= right) return;
         int middle = left + (right - left) / 2;
-        mergeSort(values, buffer, left, middle);
-        mergeSort(values, buffer, middle + 1, right);
-        merge(values, buffer, left, middle, right);
+        mergeSort(values, helper, left, middle);
+        mergeSort(values, helper, middle + 1, right);
+        merge(values, helper, left, middle, right);
     }
 
-    private void merge(double[] values, double[] buffer, int left, int middle, int right) {
-        int first = left;
-        int second = middle + 1;
-        int target = left;
+    private void mergeSort(double[] values, double[] helper, int left, int right) {
+        if (left >= right) return;
+        int middle = left + (right - left) / 2;
+        mergeSort(values, helper, left, middle);
+        mergeSort(values, helper, middle + 1, right);
+        merge(values, helper, left, middle, right);
+    }
 
-        while (first <= middle && second <= right) {
-            buffer[target++] = values[first] <= values[second] ? values[first++] : values[second++];
+    private void merge(int[] values, int[] helper, int left, int middle, int right) {
+        System.arraycopy(values, left, helper, left, right - left + 1);
+        int i = left;
+        int j = middle + 1;
+        int k = left;
+        while (i <= middle && j <= right) {
+            if (helper[i] <= helper[j]) {
+                values[k++] = helper[i++];
+            } else {
+                values[k++] = helper[j++];
+            }
         }
-        while (first <= middle) {
-            buffer[target++] = values[first++];
+        while (i <= middle) {
+            values[k++] = helper[i++];
         }
-        while (second <= right) {
-            buffer[target++] = values[second++];
+        while (j <= right) {
+            values[k++] = helper[j++];
         }
-        for (int i = left; i <= right; i++) {
-            values[i] = buffer[i];
+    }
+
+    private void merge(double[] values, double[] helper, int left, int middle, int right) {
+        System.arraycopy(values, left, helper, left, right - left + 1);
+        int i = left;
+        int j = middle + 1;
+        int k = left;
+        while (i <= middle && j <= right) {
+            if (helper[i] <= helper[j]) {
+                values[k++] = helper[i++];
+            } else {
+                values[k++] = helper[j++];
+            }
+        }
+        while (i <= middle) {
+            values[k++] = helper[i++];
+        }
+        while (j <= right) {
+            values[k++] = helper[j++];
         }
     }
 }

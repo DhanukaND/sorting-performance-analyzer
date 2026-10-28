@@ -1,36 +1,64 @@
 package com.sortinganalyzer.sorting;
 
-public final class QuickSort implements Sorter {
+public class QuickSort {
 
-    @Override
-    public void sort(double[] values) {
+    public void sort(int[] values) {
+        if (values == null || values.length < 2) return;
         quickSort(values, 0, values.length - 1);
     }
 
-    private void quickSort(double[] values, int low, int high) {
-        if (low >= high) {
-            return;
-        }
-        int pivotIndex = partition(values, low, high);
-        quickSort(values, low, pivotIndex - 1);
-        quickSort(values, pivotIndex + 1, high);
+    public void sort(double[] values) {
+        if (values == null || values.length < 2) return;
+        quickSort(values, 0, values.length - 1);
     }
 
-    private int partition(double[] values, int low, int high) {
-        double pivot = values[high];
-        int smaller = low;
-        for (int current = low; current < high; current++) {
-            if (values[current] <= pivot) {
-                swap(values, smaller++, current);
+    private void quickSort(int[] values, int low, int high) {
+        if (low >= high) return;
+        int pivot = values[high];
+        int left = low;
+        int right = high - 1;
+        while (left <= right) {
+            while (left <= right && values[left] < pivot) left++;
+            while (left <= right && values[right] > pivot) right--;
+            if (left <= right) {
+                swap(values, left, right);
+                left++;
+                right--;
             }
         }
-        swap(values, smaller, high);
-        return smaller;
+        swap(values, left, high);
+        quickSort(values, low, left - 1);
+        quickSort(values, left + 1, high);
     }
 
-    private void swap(double[] values, int first, int second) {
-        double value = values[first];
-        values[first] = values[second];
-        values[second] = value;
+    private void quickSort(double[] values, int low, int high) {
+        if (low >= high) return;
+        double pivot = values[high];
+        int left = low;
+        int right = high - 1;
+        while (left <= right) {
+            while (left <= right && values[left] < pivot) left++;
+            while (left <= right && values[right] > pivot) right--;
+            if (left <= right) {
+                swap(values, left, right);
+                left++;
+                right--;
+            }
+        }
+        swap(values, left, high);
+        quickSort(values, low, left - 1);
+        quickSort(values, left + 1, high);
+    }
+
+    private void swap(int[] values, int left, int right) {
+        int temp = values[left];
+        values[left] = values[right];
+        values[right] = temp;
+    }
+
+    private void swap(double[] values, int left, int right) {
+        double temp = values[left];
+        values[left] = values[right];
+        values[right] = temp;
     }
 }

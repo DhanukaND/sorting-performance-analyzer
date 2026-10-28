@@ -1,19 +1,38 @@
 package com.sortinganalyzer.sorting;
 
-public final class ShellSort implements Sorter {
+public class ShellSort {
 
-    @Override
-    public void sort(double[] values) {
-        for (int gap = values.length / 2; gap > 0; gap /= 2) {
+    public void sort(int[] values) {
+        if (values == null || values.length < 2) return;
+        int gap = values.length / 2;
+        while (gap > 0) {
             for (int i = gap; i < values.length; i++) {
-                double value = values[i];
-                int position = i;
-                while (position >= gap && values[position - gap] > value) {
-                    values[position] = values[position - gap];
-                    position -= gap;
+                int key = values[i];
+                int j = i - gap;
+                while (j >= 0 && values[j] > key) {
+                    values[j + gap] = values[j];
+                    j -= gap;
                 }
-                values[position] = value;
+                values[j + gap] = key;
             }
+            gap /= 2;
+        }
+    }
+
+    public void sort(double[] values) {
+        if (values == null || values.length < 2) return;
+        int gap = values.length / 2;
+        while (gap > 0) {
+            for (int i = gap; i < values.length; i++) {
+                double key = values[i];
+                int j = i - gap;
+                while (j >= 0 && values[j] > key) {
+                    values[j + gap] = values[j];
+                    j -= gap;
+                }
+                values[j + gap] = key;
+            }
+            gap /= 2;
         }
     }
 }

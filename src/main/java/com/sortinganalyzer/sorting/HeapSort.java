@@ -1,38 +1,62 @@
 package com.sortinganalyzer.sorting;
 
-public final class HeapSort implements Sorter {
+public class HeapSort {
 
-    @Override
+    public void sort(int[] values) {
+        if (values == null || values.length < 2) return;
+        int n = values.length;
+        for (int i = n / 2 - 1; i >= 0; i--) {
+            heapify(values, n, i);
+        }
+        for (int i = n - 1; i >= 0; i--) {
+            int temp = values[0];
+            values[0] = values[i];
+            values[i] = temp;
+            heapify(values, i, 0);
+        }
+    }
+
     public void sort(double[] values) {
-        for (int root = values.length / 2 - 1; root >= 0; root--) {
-            siftDown(values, root, values.length);
+        if (values == null || values.length < 2) return;
+        int n = values.length;
+        for (int i = n / 2 - 1; i >= 0; i--) {
+            heapify(values, n, i);
         }
-        for (int end = values.length - 1; end > 0; end--) {
-            swap(values, 0, end);
-            siftDown(values, 0, end);
-        }
-    }
-
-    private void siftDown(double[] values, int root, int size) {
-        while (true) {
-            int child = root * 2 + 1;
-            if (child >= size) {
-                return;
-            }
-            if (child + 1 < size && values[child + 1] > values[child]) {
-                child++;
-            }
-            if (values[root] >= values[child]) {
-                return;
-            }
-            swap(values, root, child);
-            root = child;
+        for (int i = n - 1; i >= 0; i--) {
+            double temp = values[0];
+            values[0] = values[i];
+            values[i] = temp;
+            heapify(values, i, 0);
         }
     }
 
-    private void swap(double[] values, int first, int second) {
-        double value = values[first];
-        values[first] = values[second];
-        values[second] = value;
+    private void heapify(int[] values, int n, int i) {
+        int largest = i;
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+
+        if (left < n && values[left] > values[largest]) largest = left;
+        if (right < n && values[right] > values[largest]) largest = right;
+        if (largest != i) {
+            int swap = values[i];
+            values[i] = values[largest];
+            values[largest] = swap;
+            heapify(values, n, largest);
+        }
+    }
+
+    private void heapify(double[] values, int n, int i) {
+        int largest = i;
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+
+        if (left < n && values[left] > values[largest]) largest = left;
+        if (right < n && values[right] > values[largest]) largest = right;
+        if (largest != i) {
+            double swap = values[i];
+            values[i] = values[largest];
+            values[largest] = swap;
+            heapify(values, n, largest);
+        }
     }
 }

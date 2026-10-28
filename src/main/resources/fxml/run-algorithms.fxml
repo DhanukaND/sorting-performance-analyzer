@@ -1,26 +1,209 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
 <StackPane xmlns:fx="http://javafx.com/fxml"
-           alignment="CENTER"
-           styleClass="run-screen"
+           alignment="TOP_CENTER"
+           minHeight="0"
+           maxHeight="Infinity"
+           styleClass="run-algorithms-root"
            fx:controller="com.sortinganalyzer.ui.controller.RunAlgorithmsController">
-    <VBox alignment="CENTER" maxWidth="580" spacing="14" styleClass="run-card">
-        <padding>
-            <Insets top="28" right="34" bottom="28" left="34"/>
-        </padding>
-        <Label text="Run Algorithms" styleClass="results-title"/>
-        <Label text="Choose how many benchmark runs to perform for each sorting algorithm."
-               styleClass="results-subtitle"/>
-        <Label text="Benchmark run count" styleClass="run-label"/>
-        <ComboBox fx:id="runCountBox" prefWidth="240" promptText="Select run count"
-                  styleClass="run-count-box"/>
-        <Label text="The results table will show only the selected run columns."
-               styleClass="results-subtitle"/>
+
+    <padding>
+        <Insets top="8" right="40" bottom="6" left="40"/>
+    </padding>
+
+    <VBox spacing="10"
+          maxWidth="1100"
+          minHeight="0"
+          styleClass="run-algorithms-content">
+
+        <!-- HEADER CARD -->
+        <VBox styleClass="wizard-header-card">
+            <HBox spacing="14" alignment="CENTER_LEFT">
+                <StackPane styleClass="header-icon-box">
+                    <FontIcon iconLiteral="fas-cog" iconSize="26" styleClass="header-icon"/>
+                </StackPane>
+
+                <VBox spacing="2">
+                    <Label text="Run Algorithms" styleClass="page-title"/>
+                    <Label text="Select sorting algorithms and configure the analysis settings."
+                           styleClass="page-subtitle"/>
+                </VBox>
+            </HBox>
+        </VBox>
+
+        <!-- SORTING ALGORITHMS CARD -->
+        <VBox styleClass="panel-card">
+            <HBox spacing="12" alignment="CENTER_LEFT">
+                <StackPane styleClass="panel-icon-box panel-icon-box-blue">
+                    <FontIcon iconLiteral="fas-list" iconSize="20" styleClass="panel-icon"/>
+                </StackPane>
+
+                <VBox spacing="2">
+                    <Label text="Sorting Algorithms" styleClass="panel-title"/>
+                    <Label text="Choose the algorithms you want to run."
+                           styleClass="panel-subtitle"/>
+                </VBox>
+            </HBox>
+
+            <HBox spacing="12" alignment="CENTER" styleClass="algorithm-row">
+
+                <!-- MERGE -->
+                <VBox fx:id="mergeCard"
+                      styleClass="algorithm-card"
+                      HBox.hgrow="ALWAYS"
+                      prefWidth="0" maxWidth="Infinity"
+                      prefHeight="132" minHeight="132" maxHeight="132"
+                      onMouseClicked="#toggleMergeCard">
+                    <HBox styleClass="algorithm-check-row">
+                        <CheckBox fx:id="mergeCheck"
+                                  styleClass="algorithm-check"
+                                  selected="true"
+                                  mouseTransparent="true"
+                                  focusTraversable="false"/>
+                    </HBox>
+                    <StackPane styleClass="algorithm-icon-wrap algorithm-icon-merge">
+                        <FontIcon iconLiteral="fas-code-branch" iconSize="22" styleClass="algorithm-icon"/>
+                    </StackPane>
+                    <Label text="Merge Sort" styleClass="algorithm-name"/>
+                    <Label text="Divide and conquer" wrapText="true" styleClass="algorithm-description"/>
+                </VBox>
+
+                <!-- QUICK -->
+                <VBox fx:id="quickCard"
+                      styleClass="algorithm-card"
+                      HBox.hgrow="ALWAYS"
+                      prefWidth="0" maxWidth="Infinity"
+                      prefHeight="132" minHeight="132" maxHeight="132"
+                      onMouseClicked="#toggleQuickCard">
+                    <HBox styleClass="algorithm-check-row">
+                        <CheckBox fx:id="quickCheck"
+                                  styleClass="algorithm-check"
+                                  selected="true"
+                                  mouseTransparent="true"
+                                  focusTraversable="false"/>
+                    </HBox>
+                    <StackPane styleClass="algorithm-icon-wrap algorithm-icon-quick">
+                        <FontIcon iconLiteral="fas-random" iconSize="22" styleClass="algorithm-icon"/>
+                    </StackPane>
+                    <Label text="Quick Sort" styleClass="algorithm-name"/>
+                    <Label text="Partition-based sorting" wrapText="true" styleClass="algorithm-description"/>
+                </VBox>
+
+                <!-- INSERTION -->
+                <VBox fx:id="insertionCard"
+                      styleClass="algorithm-card"
+                      HBox.hgrow="ALWAYS"
+                      prefWidth="0" maxWidth="Infinity"
+                      prefHeight="132" minHeight="132" maxHeight="132"
+                      onMouseClicked="#toggleInsertionCard">
+                    <HBox styleClass="algorithm-check-row">
+                        <CheckBox fx:id="insertionCheck"
+                                  styleClass="algorithm-check"
+                                  selected="true"
+                                  mouseTransparent="true"
+                                  focusTraversable="false"/>
+                    </HBox>
+                    <StackPane styleClass="algorithm-icon-wrap algorithm-icon-insertion">
+                        <FontIcon iconLiteral="fas-list-ol" iconSize="22" styleClass="algorithm-icon"/>
+                    </StackPane>
+                    <Label text="Insertion Sort" styleClass="algorithm-name"/>
+                    <Label text="Builds sorted order one item at a time" wrapText="true" styleClass="algorithm-description"/>
+                </VBox>
+
+                <!-- SHELL -->
+                <VBox fx:id="shellCard"
+                      styleClass="algorithm-card"
+                      HBox.hgrow="ALWAYS"
+                      prefWidth="0" maxWidth="Infinity"
+                      prefHeight="132" minHeight="132" maxHeight="132"
+                      onMouseClicked="#toggleShellCard">
+                    <HBox styleClass="algorithm-check-row">
+                        <CheckBox fx:id="shellCheck"
+                                  styleClass="algorithm-check"
+                                  selected="true"
+                                  mouseTransparent="true"
+                                  focusTraversable="false"/>
+                    </HBox>
+                    <StackPane styleClass="algorithm-icon-wrap algorithm-icon-shell">
+                        <FontIcon iconLiteral="fas-sort" iconSize="22" styleClass="algorithm-icon"/>
+                    </StackPane>
+                    <Label text="Shell Sort" styleClass="algorithm-name"/>
+                    <Label text="Insertion sort with gaps" wrapText="true" styleClass="algorithm-description"/>
+                </VBox>
+
+                <!-- HEAP -->
+                <VBox fx:id="heapCard"
+                      styleClass="algorithm-card"
+                      HBox.hgrow="ALWAYS"
+                      prefWidth="0" maxWidth="Infinity"
+                      prefHeight="132" minHeight="132" maxHeight="132"
+                      onMouseClicked="#toggleHeapCard">
+                    <HBox styleClass="algorithm-check-row">
+                        <CheckBox fx:id="heapCheck"
+                                  styleClass="algorithm-check"
+                                  selected="true"
+                                  mouseTransparent="true"
+                                  focusTraversable="false"/>
+                    </HBox>
+                    <StackPane styleClass="algorithm-icon-wrap algorithm-icon-heap">
+                        <FontIcon iconLiteral="fas-project-diagram" iconSize="22" styleClass="algorithm-icon"/>
+                    </StackPane>
+                    <Label text="Heap Sort" styleClass="algorithm-name"/>
+                    <Label text="Tree-based sorting" wrapText="true" styleClass="algorithm-description"/>
+                </VBox>
+
+            </HBox>
+        </VBox>
+
+        <!-- EXECUTION SETTINGS CARD -->
+        <VBox styleClass="panel-card execution-card">
+            <HBox spacing="12" alignment="CENTER_LEFT">
+                <StackPane styleClass="panel-icon-box panel-icon-box-blue">
+                    <FontIcon iconLiteral="fas-sliders-h" iconSize="20" styleClass="panel-icon"/>
+                </StackPane>
+
+                <VBox spacing="2">
+                    <Label text="Execution Settings" styleClass="panel-title"/>
+                    <Label text="Configure the dataset size and number of runs."
+                           styleClass="panel-subtitle"/>
+                </VBox>
+            </HBox>
+
+            <HBox spacing="20" alignment="CENTER_LEFT" styleClass="settings-row">
+                <VBox styleClass="settings-column" HBox.hgrow="ALWAYS">
+                    <Label text="Data Size" styleClass="settings-label"/>
+                    <Spinner fx:id="dataSizeSpinner" editable="true" maxWidth="Infinity"/>
+                    <Label fx:id="dataSizeHint" text="Total rows: 0" styleClass="settings-hint"/>
+                </VBox>
+
+                <Region styleClass="settings-divider" prefWidth="1" minWidth="1" maxWidth="1"/>
+
+                <VBox styleClass="settings-column" HBox.hgrow="ALWAYS">
+                    <Label text="Number of Runs" styleClass="settings-label"/>
+                    <Spinner fx:id="runCountSpinner" editable="true" maxWidth="Infinity"/>
+                    <Label text="Repeat each algorithm to compare average execution times."
+                           styleClass="settings-hint"/>
+                </VBox>
+            </HBox>
+
+            <Label fx:id="errorLabel"
+                   styleClass="validation-error"
+                   managed="false"
+                   visible="false"/>
+        </VBox>
+
     </VBox>
+
+    <!-- Overlay shown by the controller while the analysis runs -->
+    <ProgressIndicator fx:id="progressIndicator"
+                       visible="false"
+                       maxWidth="-Infinity"
+                       maxHeight="-Infinity"
+                       prefWidth="48"
+                       prefHeight="48"
+                       StackPane.alignment="CENTER"/>
 </StackPane>
