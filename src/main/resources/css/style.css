@@ -12,13 +12,11 @@
     -fx-background-repeat: no-repeat;
 }
 
-/* ========= CSS for Top Stepper ========*/
-/* Container */
+/* ========= TOP STEPPER ========= */
 .stepper {
     -fx-padding: 15 40 6 40;
 }
 
-/* One step column */
 .step-box {
     -fx-alignment: TOP_CENTER;
     -fx-spacing: 4;
@@ -27,7 +25,6 @@
     -fx-max-width: 140;
 }
 
-/* Fixed 40x40 box that holds circle + number */
 .step-circle-holder {
     -fx-pref-width: 40;
     -fx-pref-height: 40;
@@ -37,12 +34,10 @@
     -fx-max-height: 40;
 }
 
-/* Connector line */
 .step-line {
     -fx-background-color: #CBD5E1;
 }
 
-/* Active step */
 .step-circle-active {
     -fx-fill: #2563EB;
     -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.35), 8, 0, 0, 2);
@@ -60,7 +55,6 @@
     -fx-font-weight: bold;
 }
 
-/* Inactive steps */
 .step-circle {
     -fx-fill: #E2E8F0;
     -fx-stroke: #CBD5E1;
@@ -78,22 +72,20 @@
     -fx-stroke: #93C5FD;
     -fx-stroke-width: 2;
 }
+
 .step-number-done {
     -fx-text-fill: white;
     -fx-font-size: 14px;
     -fx-font-weight: bold;
 }
 
-.step-label-done  {
+.step-label-done {
     -fx-text-fill: #1E3A8A;
     -fx-font-size: 13px;
     -fx-font-weight: bold;
 }
-/* =========================================*/
 
-
-/* ========= CSS for Bottom Nav Buttons ========*/
-/* Primary (Next) */
+/* ========= BOTTOM NAV BUTTONS ========= */
 .nav-button-primary {
     -fx-background-color: #2563EB;
     -fx-graphic-text-gap: 8;
@@ -104,6 +96,7 @@
     -fx-padding: 10 28 10 28;
     -fx-cursor: hand;
 }
+
 .nav-button-primary:hover {
     -fx-background-color: #1D4ED8;
 }
@@ -126,7 +119,6 @@
     -fx-icon-color: #94A3B8;
 }
 
-/* Secondary (Back) */
 .nav-button-secondary {
     -fx-background-color: white;
     -fx-graphic-text-gap: 8;
@@ -140,15 +132,12 @@
     -fx-padding: 9 24 9 24;
     -fx-cursor: hand;
 }
+
 .nav-button-secondary:hover {
     -fx-background-color: #F1F5F9;
 }
-/* =========================================*/
 
-
-/* ========= CSS for FILE SELECTION ========*/
-
-/* Browse Button */
+/* ========= FILE SELECTION ========= */
 .browse-button {
     -fx-background-color: #2563EB;
     -fx-text-fill: white;
@@ -172,7 +161,6 @@
     -fx-icon-color: #2563EB;
 }
 
-/* Choose a different file */
 .change-file-button {
     -fx-background-color: white;
     -fx-text-fill: #2563EB;
@@ -186,17 +174,19 @@
     -fx-graphic-text-gap: 8;
     -fx-cursor: hand;
 }
+
 .change-file-button:hover {
     -fx-background-color: #EFF6FF;
 }
+
 .change-file-button:pressed {
     -fx-background-color: #DBEAFE;
 }
+
 .change-file-button .ikonli-font-icon {
     -fx-icon-color: #2563EB;
 }
 
-/* Remove file */
 .remove-file-button {
     -fx-background-color: white;
     -fx-text-fill: #DC2626;
@@ -210,29 +200,25 @@
     -fx-graphic-text-gap: 8;
     -fx-cursor: hand;
 }
+
 .remove-file-button:hover {
     -fx-background-color: #FEF2F2;
 }
+
 .remove-file-button:pressed {
     -fx-background-color: #FEE2E2;
 }
+
 .remove-file-button .ikonli-font-icon {
     -fx-icon-color: #DC2626;
 }
 
-/* ========================================*/
-
-
-/* ========= CSS for COLUMN SELECTION ========*/
-
-/* ===== Column combo box ===== */
-
-/* the closed box */
+/* ========= COLUMN SELECTION ========= */
 .column-combo {
-    -fx-background-color: #EFF6FF;           /* light blue */
+    -fx-background-color: #EFF6FF;
     -fx-background-insets: 0;
     -fx-background-radius: 8;
-    -fx-border-color: #2563EB;               /* blue border */
+    -fx-border-color: #2563EB;
     -fx-border-width: 1.5;
     -fx-border-radius: 4;
     -fx-padding: 2 4 2 4;
@@ -243,14 +229,12 @@
     -fx-background-color: #DBEAFE;
 }
 
-/* remove the default focus ring and keep the blue border */
 .column-combo:focused {
     -fx-background-color: #EFF6FF;
     -fx-background-insets: 0;
     -fx-background-radius: 8;
 }
 
-/* selected text and prompt text */
 .column-combo .list-cell {
     -fx-background-color: transparent;
     -fx-text-fill: #1E3A8A;
@@ -258,16 +242,15 @@
     -fx-font-weight: bold;
 }
 
-/* the arrow button area */
 .column-combo .arrow-button {
     -fx-background-color: transparent;
     -fx-background-radius: 0 8 8 0;
 }
+
 .column-combo .arrow {
-    -fx-background-color: #2563EB;           /* blue arrow */
+    -fx-background-color: #2563EB;
 }
 
-/* the dropdown list (white background) */
 .column-combo .list-view {
     -fx-background-color: white;
     -fx-border-color: #2563EB;
@@ -302,7 +285,6 @@
     -fx-faint-focus-color: transparent;
 }
 
-/* header bar */
 .preview-table .column-header-background {
     -fx-background-color: #EEF4FF;
     -fx-background-radius: 8 8 0 0;
@@ -324,7 +306,6 @@
     -fx-font-weight: bold;
 }
 
-/* rows */
 .preview-table .table-row-cell {
     -fx-cell-size: 32px;
     -fx-background-color: white;
@@ -344,7 +325,6 @@
     -fx-background-color: #DBEAFE;
 }
 
-/* cells */
 .preview-table .table-cell {
     -fx-alignment: CENTER_LEFT;
     -fx-padding: 0 12 0 12;
@@ -358,20 +338,23 @@
     -fx-text-fill: #1E3A8A;
 }
 
-/* empty table message */
 .preview-table .placeholder .label {
     -fx-text-fill: #94A3B8;
     -fx-font-size: 13px;
 }
 
-/* slim rounded scrollbars */
 .preview-table .scroll-bar {
     -fx-background-color: transparent;
     -fx-padding: 2;
 }
 
-.preview-table .scroll-bar:vertical   { -fx-pref-width: 12; }
-.preview-table .scroll-bar:horizontal { -fx-pref-height: 12; }
+.preview-table .scroll-bar:vertical {
+    -fx-pref-width: 12;
+}
+
+.preview-table .scroll-bar:horizontal {
+    -fx-pref-height: 12;
+}
 
 .preview-table .scroll-bar .track {
     -fx-background-color: #F1F5F9;
@@ -389,7 +372,6 @@
     -fx-background-color: #94A3B8;
 }
 
-/* hide the arrow buttons */
 .preview-table .scroll-bar .increment-button,
 .preview-table .scroll-bar .decrement-button {
     -fx-padding: 0;
@@ -404,4 +386,254 @@
 
 .preview-table .corner {
     -fx-background-color: transparent;
+}
+
+/* ========= RUN ALGORITHMS ========= */
+.run-algorithms-root {
+    -fx-min-height: 0;
+}
+
+.run-algorithms-content {
+    -fx-min-height: 0;
+}
+
+/* ----- Header card ----- */
+.wizard-header-card {
+    -fx-background-color: rgba(255,255,255,0.72);
+    -fx-background-radius: 16px;
+    -fx-padding: 10 16 10 16;
+    -fx-border-color: rgba(148, 163, 184, 0.3);
+    -fx-border-radius: 16px;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(37, 99, 235, 0.10), 12, 0, 0, 4);
+}
+
+.header-icon-box {
+    -fx-padding: 10;
+    -fx-background-color: linear-gradient(to bottom, #3B82F6, #2563EB);
+    -fx-background-radius: 14px;
+    -fx-pref-width: 50;
+    -fx-min-width: 50;
+    -fx-max-width: 50;
+    -fx-pref-height: 50;
+    -fx-min-height: 50;
+    -fx-max-height: 50;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(37, 99, 235, 0.35), 10, 0, 0, 4);
+}
+
+.header-icon {
+    -fx-icon-color: white;
+}
+
+.page-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0F172A;
+}
+
+.page-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #475569;
+}
+
+/* ----- Panel cards ----- */
+.panel-card {
+    -fx-background-color: rgba(255,255,255,0.72);
+    -fx-background-radius: 16px;
+    -fx-padding: 12 16 12 16;
+    -fx-spacing: 8;
+    -fx-border-color: rgba(148, 163, 184, 0.28);
+    -fx-border-radius: 16px;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(37, 99, 235, 0.08), 10, 0, 0, 3);
+}
+
+.panel-icon-box {
+    -fx-padding: 8;
+    -fx-background-color: #DBEAFE;
+    -fx-background-radius: 10px;
+    -fx-pref-width: 40;
+    -fx-min-width: 40;
+    -fx-max-width: 40;
+    -fx-pref-height: 40;
+    -fx-min-height: 40;
+    -fx-max-height: 40;
+    -fx-alignment: center;
+}
+
+.panel-icon-box-blue {
+    -fx-background-color: #DBEAFE;
+}
+
+.panel-icon {
+    -fx-icon-color: #2563EB;
+}
+
+.panel-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0F172A;
+}
+
+.panel-subtitle {
+    -fx-font-size: 12px;
+    -fx-text-fill: #64748B;
+}
+
+/* ----- Algorithm row and cards ----- */
+.algorithm-row {
+    -fx-padding: 0;
+    -fx-alignment: center;
+    -fx-spacing: 12;
+}
+
+.algorithm-card {
+    -fx-background-color: #F8FAFC;
+    -fx-background-radius: 16px;
+    -fx-border-color: #CBD5E1;
+    -fx-border-radius: 16px;
+    -fx-border-width: 1.5px;
+    -fx-padding: 6 8 8 8;
+    -fx-alignment: TOP_CENTER;
+    -fx-spacing: 3;
+    -fx-cursor: hand;
+}
+
+.algorithm-card:hover {
+    -fx-background-color: #EFF6FF;
+}
+
+.algorithm-card-selected {
+    -fx-border-color: #2563EB;
+    -fx-background-color: #EFF6FF;
+    -fx-effect: dropshadow(gaussian, rgba(37, 99, 235, 0.15), 8, 0, 0, 3);
+}
+
+.algorithm-check-row {
+    -fx-alignment: CENTER_LEFT;
+}
+
+.algorithm-check .box {
+    -fx-background-color: white;
+    -fx-border-color: #2563EB;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 4px;
+}
+
+.algorithm-check:selected .box {
+    -fx-background-color: #2563EB;
+    -fx-border-color: #2563EB;
+}
+
+.algorithm-check:selected .mark {
+    -fx-background-color: white;
+    -fx-shape: "M0,5 L4,9 L10,0 L12,2 L4,12 L0,8 Z";
+}
+
+.algorithm-check:focused .box {
+    -fx-border-color: #2563EB;
+}
+
+/* ----- Algorithm icons ----- */
+.algorithm-icon-wrap {
+    -fx-pref-width: 44;
+    -fx-min-width: 44;
+    -fx-max-width: 44;
+    -fx-pref-height: 44;
+    -fx-min-height: 44;
+    -fx-max-height: 44;
+    -fx-background-radius: 22px;
+    -fx-alignment: center;
+    -fx-padding: 0;
+}
+
+.algorithm-icon {
+    -fx-icon-color: #0F172A;
+}
+
+.algorithm-icon-merge {
+    -fx-background-color: #DBEAFE;
+}
+
+.algorithm-icon-quick {
+    -fx-background-color: #FEE2E2;
+}
+
+.algorithm-icon-insertion {
+    -fx-background-color: #DCFCE7;
+}
+
+.algorithm-icon-shell {
+    -fx-background-color: #FDE68A;
+}
+
+.algorithm-icon-heap {
+    -fx-background-color: #F3E8FF;
+}
+
+.algorithm-name {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0F172A;
+}
+
+.algorithm-description {
+    -fx-font-size: 12px;
+    -fx-text-fill: #475569;
+    -fx-wrap-text: true;
+    -fx-text-alignment: center;
+    -fx-alignment: CENTER;
+    -fx-max-width: 142px;
+}
+
+/* ----- Execution settings ----- */
+.execution-card {
+    -fx-padding: 12 16 12 16;
+}
+
+.settings-row {
+    -fx-padding: 2 0 0 0;
+}
+
+.settings-column {
+    -fx-spacing: 4;
+    -fx-padding: 0 6 0 6;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.settings-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0F172A;
+}
+
+.settings-divider {
+    -fx-background-color: #E2E8F0;
+}
+
+.settings-hint {
+    -fx-font-size: 12px;
+    -fx-text-fill: #64748B;
+}
+
+/* ----- Validation, spinners, progress ----- */
+.validation-error {
+    -fx-text-fill: #B91C1C;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 6 0 0 0;
+}
+
+.spinner {
+    -fx-background-color: #F8FAFC;
+    -fx-border-color: #CBD5E1;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 4 8 4 8;
+    -fx-pref-height: 28;
+}
+
+.progress-indicator {
+    -fx-progress-color: #2563EB;
 }
