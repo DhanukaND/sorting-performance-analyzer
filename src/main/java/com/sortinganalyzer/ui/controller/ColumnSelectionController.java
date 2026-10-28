@@ -42,15 +42,20 @@ public class ColumnSelectionController implements WizardStep {
             loadPreview(csv, PREVIEW_ROWS);
         }
 
-        // remember choices (attached after loadPreview so clearing doesn't write null)
         columnBox.getSelectionModel().selectedItemProperty().addListener((obs, old, value) -> {
             int pos = columnBox.getSelectionModel().getSelectedIndex();
+            int realIndex = pos >= 0 && pos < numericColumnIndexes.size() ? numericColumnIndexes.get(pos) : -1;
             WizardState.get().selectedColumnProperty().set(value);
-            WizardState.get().selectedColumnIndexProperty()
-                    .set(pos >= 0 ? numericColumnIndexes.get(pos) : -1);
+            WizardState.get().selectedColumnIndexProperty().set(realIndex);
+            if (realIndex >= 0 && WizardState.get().selectedFileProperty().get() != null) {
+                WizardState.get().setSelectedColumnValues(readSelectedColumnValues(WizardState.get().selectedFileProperty().get(), realIndex));
+                WizardState.get().datasetSizeProperty().set(WizardState.get().selectedColumnValuesProperty().get().size());
+            } else {
+                WizardState.get().setSelectedColumnValues(List.of());
+                WizardState.get().datasetSizeProperty().set(0);
+            }
         });
 
-        // restore the previous choice: the saved value is a CSV index, find its combo position
         int savedIndex = WizardState.get().selectedColumnIndexProperty().get();
         int pos = numericColumnIndexes.indexOf(savedIndex);
         if (pos >= 0) {
@@ -58,14 +63,10 @@ public class ColumnSelectionController implements WizardStep {
         }
     }
 
-    // ---------- WizardStep ----------
-
     @Override
     public ObservableBooleanValue canProceed() {
         return columnBox.getSelectionModel().selectedItemProperty().isNotNull();
     }
-
-    // ---------- CSV loading ----------
 
     private void loadPreview(File csv, int maxRows) {
         clearPreview();
@@ -83,10 +84,8 @@ public class ColumnSelectionController implements WizardStep {
                 return;
             }
 
-            // first record = header row
             List<String> headers = new ArrayList<>(records.next().toList());
             if (!headers.isEmpty()) {
-                // strip a UTF-8 BOM that Excel adds to the first header
                 headers.set(0, headers.get(0).replace("\uFEFF", ""));
             }
 
@@ -96,7 +95,6 @@ public class ColumnSelectionController implements WizardStep {
                 titles.add(t.isEmpty() ? "Column " + (i + 1) : t);
             }
 
-            // preview table shows every column
             for (int i = 0; i < titles.size(); i++) {
                 final int col = i;
                 TableColumn<ObservableList<String>, String> column = new TableColumn<>(titles.get(i));
@@ -106,14 +104,13 @@ public class ColumnSelectionController implements WizardStep {
                 previewTable.getColumns().add(column);
             }
 
-            // one pass: keep the first maxRows, count everything, test columns for numbers
             ObservableList<ObservableList<String>> rows = FXCollections.observableArrayList();
             long totalRows = 0;
 
             boolean[] numeric = new boolean[titles.size()];
             boolean[] hasValue = new boolean[titles.size()];
             Arrays.fill(numeric, true);
-            int candidates = titles.size();   // columns still possibly numeric
+            int candidates = titles.size();
 
             while (records.hasNext()) {
                 CSVRecord record = records.next();
@@ -128,12 +125,12 @@ public class ColumnSelectionController implements WizardStep {
                         if (!numeric[c] || c >= record.size()) continue;
 
                         String v = record.get(c).trim();
-                        if (v.isEmpty()) continue;          // blanks are ignored
+                        if (v.isEmpty()) continue;
 
                         if (isNumber(v)) {
                             hasValue[c] = true;
                         } else {
-                            numeric[c] = false;             // never checked again
+                            numeric[c] = false;
                             candidates--;
                         }
                     }
@@ -141,7 +138,6 @@ public class ColumnSelectionController implements WizardStep {
             }
             previewTable.setItems(rows);
 
-            // the combo lists only all-numeric columns
             List<String> numericTitles = new ArrayList<>();
             for (int c = 0; c < numeric.length; c++) {
                 if (numeric[c] && hasValue[c]) {
@@ -162,6 +158,8 @@ public class ColumnSelectionController implements WizardStep {
                     : "Showing all " + shown + " rows");
             datasetSizeLabel.setText(totalRows + " rows × " + headers.size() + " columns");
 
+            WizardState.get().setParsedRows(readAllRows(csv));
+
         } catch (IOException | RuntimeException e) {
             e.printStackTrace();
             clearPreview();
@@ -169,7 +167,44 @@ public class ColumnSelectionController implements WizardStep {
         }
     }
 
-    /** Fast check: optional sign, digits, optional decimal point, optional exponent. Input must be non-empty. */
+    private List<List<String>> readAllRows(File csv) {
+        List<List<String>> allRows = new ArrayList<>();
+        try (Reader in = Files.newBufferedReader(csv.toPath());
+             CSVParser parser = CSVFormat.DEFAULT.builder().setIgnoreEmptyLines(true).build().parse(in)) {
+            for (CSVRecord record : parser) {
+                allRows.add(new ArrayList<>(record.toList()));
+            }
+        } catch (IOException e) {
+            return List.of();
+        }
+        return allRows;
+    }
+
+    private List<Double> readSelectedColumnValues(File csv, int columnIndex) {
+        if (columnIndex < 0) return List.of();
+        List<Double> values = new ArrayList<>();
+        try (Reader in = Files.newBufferedReader(csv.toPath());
+             CSVParser parser = CSVFormat.DEFAULT.builder().setIgnoreEmptyLines(true).build().parse(in)) {
+            Iterator<CSVRecord> records = parser.iterator();
+            if (!records.hasNext()) return List.of();
+            records.next();
+            while (records.hasNext()) {
+                CSVRecord record = records.next();
+                if (columnIndex >= record.size()) continue;
+                String value = record.get(columnIndex).trim();
+                if (value.isEmpty()) continue;
+                try {
+                    values.add(Double.parseDouble(value));
+                } catch (NumberFormatException ignored) {
+                    // skip invalid values safely
+                }
+            }
+        } catch (IOException e) {
+            return List.of();
+        }
+        return values;
+    }
+
     private static boolean isNumber(String s) {
         int n = s.length(), i = 0;
         char first = s.charAt(0);

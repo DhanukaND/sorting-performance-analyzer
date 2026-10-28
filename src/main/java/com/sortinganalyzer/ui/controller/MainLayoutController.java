@@ -34,7 +34,9 @@ public class MainLayoutController {
         show(0);
     }
 
-    private void show(int newIndex) {
+    public int getIndex() { return index; }
+
+    public void show(int newIndex) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(SCREENS[newIndex]));
             Node content = loader.load();
@@ -43,7 +45,6 @@ public class MainLayoutController {
             index = newIndex;
             stepperController.setCurrentStep(index + 1);
 
-            // reset the nav bar to defaults
             nextButton.disableProperty().unbind();
             nextButton.setDisable(false);
             nextButton.setText(index == SCREENS.length - 1 ? "Finish" : "Next");
@@ -51,7 +52,6 @@ public class MainLayoutController {
             backButton.setVisible(index > 0);
             backButton.setManaged(index > 0);
 
-            // let the screen customise it
             Object controller = loader.getController();
             if (controller instanceof WizardStep step) {
                 currentStep = step;
@@ -60,6 +60,14 @@ public class MainLayoutController {
                 nextButton.disableProperty().bind(Bindings.not(step.canProceed()));
             } else {
                 currentStep = null;
+            }
+
+            if (controller instanceof RunAlgorithmsController runController) {
+                runController.setNavigationCallback(() -> {
+                    if (index < SCREENS.length - 1) {
+                        show(index + 1);
+                    }
+                });
             }
         } catch (IOException e) {
             throw new RuntimeException("Failed to load " + SCREENS[newIndex], e);
