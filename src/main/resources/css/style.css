@@ -220,6 +220,7 @@
     -fx-icon-color: #DC2626;
 }
 
+<<<<<<< HEAD
 /* ========================================*/
 
 
@@ -228,6 +229,9 @@
 /* ===== Column combo box ===== */
 
 /* the closed box */
+=======
+/* ========= COLUMN SELECTION ========= */
+>>>>>>> parent of 23cc64a (Merge branch 'feature/ui-performance' into dev)
 .column-combo {
     -fx-background-color: #EFF6FF;           /* light blue */
     -fx-background-insets: 0;
@@ -404,4 +408,257 @@
 
 .preview-table .corner {
     -fx-background-color: transparent;
+<<<<<<< HEAD
+=======
+}
+
+/* ========= RUN ALGORITHMS ========= */
+.run-algorithms-root {
+    -fx-min-height: 0;
+}
+
+.run-algorithms-content {
+    -fx-min-height: 0;
+}
+
+/* ----- Header card ----- */
+.wizard-header-card {
+    -fx-background-color: rgba(255,255,255,0.72);
+    -fx-background-radius: 16px;
+    -fx-padding: 10 16 10 16;
+    -fx-border-color: rgba(148, 163, 184, 0.3);
+    -fx-border-radius: 16px;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(37, 99, 235, 0.10), 12, 0, 0, 4);
+}
+
+.header-icon-box {
+    -fx-padding: 10;
+    -fx-background-color: linear-gradient(to bottom, #3B82F6, #2563EB);
+    -fx-background-radius: 14px;
+    -fx-pref-width: 50;
+    -fx-min-width: 50;
+    -fx-max-width: 50;
+    -fx-pref-height: 50;
+    -fx-min-height: 50;
+    -fx-max-height: 50;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(37, 99, 235, 0.35), 10, 0, 0, 4);
+}
+
+.header-icon {
+    -fx-icon-color: white;
+}
+
+.page-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0F172A;
+}
+
+.page-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #475569;
+}
+
+/* ----- Panel cards ----- */
+.panel-card {
+    -fx-background-color: rgba(255,255,255,0.72);
+    -fx-background-radius: 16px;
+    -fx-padding: 12 16 12 16;
+    -fx-spacing: 8;
+    -fx-border-color: rgba(148, 163, 184, 0.28);
+    -fx-border-radius: 16px;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(gaussian, rgba(37, 99, 235, 0.08), 10, 0, 0, 3);
+}
+
+.panel-icon-box {
+    -fx-padding: 8;
+    -fx-background-color: #DBEAFE;
+    -fx-background-radius: 10px;
+    -fx-pref-width: 40;
+    -fx-min-width: 40;
+    -fx-max-width: 40;
+    -fx-pref-height: 40;
+    -fx-min-height: 40;
+    -fx-max-height: 40;
+    -fx-alignment: center;
+}
+
+.panel-icon-box-blue {
+    -fx-background-color: #DBEAFE;
+}
+
+.panel-icon {
+    -fx-icon-color: #2563EB;
+}
+
+.panel-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0F172A;
+}
+
+.panel-subtitle {
+    -fx-font-size: 12px;
+    -fx-text-fill: #64748B;
+}
+
+/* ----- Algorithm row and cards ----- */
+.algorithm-row {
+    -fx-padding: 0;
+    -fx-alignment: center;
+    -fx-spacing: 12;
+}
+
+.algorithm-card {
+    -fx-background-color: #F8FAFC;
+    -fx-background-radius: 16px;
+    -fx-border-color: #CBD5E1;
+    -fx-border-radius: 16px;
+    -fx-border-width: 1.5px;
+    -fx-padding: 6 8 8 8;
+    -fx-alignment: TOP_CENTER;
+    -fx-spacing: 3;
+    -fx-cursor: hand;
+}
+
+.algorithm-card:hover {
+    -fx-background-color: #EFF6FF;
+}
+
+.algorithm-card-selected {
+    -fx-border-color: #2563EB;
+    -fx-background-color: #EFF6FF;
+    -fx-effect: dropshadow(gaussian, rgba(37, 99, 235, 0.15), 8, 0, 0, 3);
+}
+
+.algorithm-check-row {
+    -fx-alignment: CENTER_LEFT;
+}
+
+.algorithm-check .box {
+    -fx-background-color: white;
+    -fx-border-color: #2563EB;
+    -fx-border-width: 1.5px;
+    -fx-border-radius: 4px;
+}
+
+.algorithm-check:selected .box {
+    -fx-background-color: #2563EB;
+    -fx-border-color: #2563EB;
+}
+
+.algorithm-check:selected .mark {
+    -fx-background-color: white;
+    -fx-shape: "M0,5 L4,9 L10,0 L12,2 L4,12 L0,8 Z";
+}
+
+.algorithm-check:focused .box {
+    -fx-border-color: #2563EB;
+}
+
+/* ----- Algorithm icons ----- */
+.algorithm-icon-wrap {
+    -fx-pref-width: 44;
+    -fx-min-width: 44;
+    -fx-max-width: 44;
+    -fx-pref-height: 44;
+    -fx-min-height: 44;
+    -fx-max-height: 44;
+    -fx-background-radius: 22px;
+    -fx-alignment: center;
+    -fx-padding: 0;
+}
+
+.algorithm-icon {
+    -fx-icon-color: #0F172A;
+}
+
+.algorithm-icon-merge {
+    -fx-background-color: #DBEAFE;
+}
+
+.algorithm-icon-quick {
+    -fx-background-color: #FEE2E2;
+}
+
+.algorithm-icon-insertion {
+    -fx-background-color: #DCFCE7;
+}
+
+.algorithm-icon-shell {
+    -fx-background-color: #FDE68A;
+}
+
+.algorithm-icon-heap {
+    -fx-background-color: #F3E8FF;
+}
+
+.algorithm-name {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0F172A;
+}
+
+.algorithm-description {
+    -fx-font-size: 12px;
+    -fx-text-fill: #475569;
+    -fx-wrap-text: true;
+    -fx-text-alignment: center;
+    -fx-alignment: CENTER;
+    -fx-max-width: 142px;
+}
+
+/* ----- Execution settings ----- */
+.execution-card {
+    -fx-padding: 12 16 12 16;
+}
+
+.settings-row {
+    -fx-padding: 2 0 0 0;
+}
+
+.settings-column {
+    -fx-spacing: 4;
+    -fx-padding: 0 6 0 6;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.settings-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0F172A;
+}
+
+.settings-divider {
+    -fx-background-color: #E2E8F0;
+}
+
+.settings-hint {
+    -fx-font-size: 12px;
+    -fx-text-fill: #64748B;
+}
+
+/* ----- Validation, spinners, progress ----- */
+.validation-error {
+    -fx-text-fill: #B91C1C;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 6 0 0 0;
+}
+
+.spinner {
+    -fx-background-color: #F8FAFC;
+    -fx-border-color: #CBD5E1;
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-padding: 4 8 4 8;
+    -fx-pref-height: 28;
+}
+
+.progress-indicator {
+    -fx-progress-color: #2563EB;
+>>>>>>> parent of 23cc64a (Merge branch 'feature/ui-performance' into dev)
 }
