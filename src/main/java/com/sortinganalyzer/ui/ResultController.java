@@ -6,7 +6,6 @@ import com.sortinganalyzer.sorting.InsertionSort;
 import com.sortinganalyzer.sorting.MergeSort;
 import com.sortinganalyzer.sorting.QuickSort;
 import com.sortinganalyzer.sorting.ShellSort;
-import com.sortinganalyzer.sorting.Sorter;
 import com.sortinganalyzer.ui.controller.WizardState;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,7 +18,10 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Controls the Step 4 results view and evaluates the configured sorting
@@ -66,12 +68,12 @@ public class ResultController {
 
     private int selectedRunCount = 3;
 
-    private final List<NamedSorter> sorters = List.of(
-            new NamedSorter("Merge Sort", new MergeSort()),
-            new NamedSorter("Quick Sort", new QuickSort()),
-            new NamedSorter("Insertion Sort", new InsertionSort()),
-            new NamedSorter("Shell Sort", new ShellSort()),
-            new NamedSorter("Heap Sort", new HeapSort())
+    private final List<AlgorithmDefinition> algorithms = List.of(
+            new AlgorithmDefinition("Merge Sort", new MergeSort()::sort),
+            new AlgorithmDefinition("Quick Sort", new QuickSort()::sort),
+            new AlgorithmDefinition("Insertion Sort", new InsertionSort()::sort),
+            new AlgorithmDefinition("Shell Sort", new ShellSort()::sort),
+            new AlgorithmDefinition("Heap Sort", new HeapSort()::sort)
     );
 
     /**
@@ -89,9 +91,7 @@ public class ResultController {
         selectedRunCount = Math.max(1, Math.min(RUN_COUNT, WizardState.get().runCountProperty().get()));
         updateRunColumns();
         try {
-            double[] dataset = CsvLoader.loadNumericColumn(
-                    WizardState.get().selectedFileProperty().get(),
-                    WizardState.get().selectedColumnIndexProperty().get());
+            double[] dataset = loadSelectedDataset();
             evaluatePerformance(dataset, selectedRunCount);
         } catch (IOException | IllegalArgumentException exception) {
             showLoadError(exception.getMessage());
@@ -131,25 +131,36 @@ public class ResultController {
 
         ObservableList<AlgorithmResult> results = FXCollections.observableArrayList();
         AlgorithmResult bestResult = null;
+        List<WizardState.AlgorithmResult> sharedResults = new ArrayList<>();
 
-        for (NamedSorter namedSorter : sorters) {
+        for (AlgorithmDefinition algorithm : algorithms) {
             double[] runTimes = new double[RUN_COUNT];
+            List<Long> runTimesNanos = new ArrayList<>(selectedRunCount);
 
             for (int run = 0; run < selectedRunCount; run++) {
-                double[] input = dataset.clone();
+                double[] input = Arrays.copyOf(dataset, dataset.length);
                 long start = System.nanoTime();
-                namedSorter.sorter().sort(input);
-                runTimes[run] = (System.nanoTime() - start) / 1_000_000.0;
+                algorithm.sort(input);
+                long elapsedNanos = System.nanoTime() - start;
+                runTimesNanos.add(elapsedNanos);
+                runTimes[run] = elapsedNanos / 1_000_000.0;
             }
 
             AlgorithmResult result = new AlgorithmResult(
-                    namedSorter.name(),
+                    algorithm.name(),
                     runTimes[0],
                     runTimes[1],
                     runTimes[2],
                     selectedRunCount
             );
             results.add(result);
+            sharedResults.add(new WizardState.AlgorithmResult(
+                    algorithm.name(),
+                    runTimesNanos,
+                    result.averageValue(),
+                    result.minimumValue(),
+                    result.maximumValue()
+            ));
 
             if (bestResult == null || result.averageValue() < bestResult.averageValue()) {
                 bestResult = result;
@@ -159,6 +170,7 @@ public class ResultController {
         if (performanceTable != null) {
             performanceTable.setItems(results);
         }
+        WizardState.get().setAlgorithmResults(sharedResults);
         updateChart(results);
         if (bestResult != null) {
             if (bestAlgorithmNameLabel != null) {
@@ -168,6 +180,25 @@ public class ResultController {
                 bestAlgorithmTimeLabel.setText(bestResult.average());
             }
         }
+    }
+
+    private double[] loadSelectedDataset() throws IOException {
+        List<Double> selectedValues = WizardState.get().selectedColumnValuesProperty().get();
+        if (selectedValues != null && !selectedValues.isEmpty()) {
+            double[] dataset = new double[selectedValues.size()];
+            for (int index = 0; index < selectedValues.size(); index++) {
+                Double value = selectedValues.get(index);
+                if (value == null || !Double.isFinite(value)) {
+                    throw new IllegalArgumentException("The selected column contains invalid numeric data.");
+                }
+                dataset[index] = value;
+            }
+            return dataset;
+        }
+
+        return CsvLoader.loadNumericColumn(
+                WizardState.get().selectedFileProperty().get(),
+                WizardState.get().selectedColumnIndexProperty().get());
     }
 
     private void updateRunColumns() {
@@ -207,21 +238,9 @@ public class ResultController {
         }
     }
 
-    private static final class NamedSorter {
-        private final String name;
-        private final Sorter sorter;
-
-        private NamedSorter(String name, Sorter sorter) {
-            this.name = name;
-            this.sorter = sorter;
-        }
-
-        private String name() {
-            return name;
-        }
-
-        private Sorter sorter() {
-            return sorter;
+    private record AlgorithmDefinition(String name, Consumer<double[]> sorter) {
+        private void sort(double[] values) {
+            sorter.accept(values);
         }
     }
 
@@ -237,6 +256,8 @@ public class ResultController {
         private final String minimum;
         private final String maximum;
         private final double averageValue;
+        private final double minimumValue;
+        private final double maximumValue;
 
         private AlgorithmResult(String algorithmName, double run1, double run2, double run3, int runCount) {
             this.algorithmName = algorithmName;
@@ -246,9 +267,9 @@ public class ResultController {
             double total = run1 + (runCount >= 2 ? run2 : 0) + (runCount >= 3 ? run3 : 0);
             this.averageValue = total / runCount;
             this.average = format(averageValue);
-            double minimumValue = runCount == 1 ? run1
+            minimumValue = runCount == 1 ? run1
                     : runCount == 2 ? Math.min(run1, run2) : Math.min(run1, Math.min(run2, run3));
-            double maximumValue = runCount == 1 ? run1
+            maximumValue = runCount == 1 ? run1
                     : runCount == 2 ? Math.max(run1, run2) : Math.max(run1, Math.max(run2, run3));
             this.minimum = format(minimumValue);
             this.maximum = format(maximumValue);
@@ -294,8 +315,17 @@ public class ResultController {
             return averageValue;
         }
 
+        private double minimumValue() {
+            return minimumValue;
+        }
+
+        private double maximumValue() {
+            return maximumValue;
+        }
+
         private static String format(double milliseconds) {
             return String.format(java.util.Locale.ROOT, TIME_FORMAT, milliseconds);
         }
+
     }
 }
