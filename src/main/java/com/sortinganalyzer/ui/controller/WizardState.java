@@ -1,9 +1,14 @@
 package com.sortinganalyzer.ui.controller;
 
-import javafx.beans.property.*;
-
 import java.io.File;
 import java.util.List;
+
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 public class WizardState {
 

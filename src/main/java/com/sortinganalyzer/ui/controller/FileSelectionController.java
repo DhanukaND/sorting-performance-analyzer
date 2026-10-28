@@ -16,9 +16,6 @@ import java.io.File;
 import java.util.Objects;
 import javafx.scene.text.Text;
 
-//temp
-import javafx.beans.property.SimpleBooleanProperty;
-
 public class FileSelectionController implements WizardStep {
 
     @FXML private VBox emptyState;
@@ -62,8 +59,7 @@ public class FileSelectionController implements WizardStep {
 
     @Override
     public ObservableBooleanValue canProceed() {
-            return selectedFile.isNotNull();
-          //return new SimpleBooleanProperty(true);
+        return selectedFile.isNotNull();
     }
 
 
