@@ -1,4 +1,7 @@
 package com.sortinganalyzer.sorting;
 
-public class Sorter {
+@FunctionalInterface
+public interface Sorter {
+
+    void sort(double[] values);
 }
