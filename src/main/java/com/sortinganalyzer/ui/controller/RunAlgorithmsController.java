@@ -24,7 +24,7 @@ import java.util.List;
 public class RunAlgorithmsController implements WizardStep {
 
     private static final int DEFAULT_RUNS = 3;
-    private static final int MAX_RUNS = 10;
+    private static final int MAX_RUNS = 5;
 
     @FXML private VBox mergeCard;
     @FXML private VBox quickCard;
