@@ -1,16 +1,9 @@
 package com.sortinganalyzer.ui.controller;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.function.Consumer;
-
-import com.sortinganalyzer.csv.CsvLoader;
-import com.sortinganalyzer.sorting.HeapSort;
-import com.sortinganalyzer.sorting.InsertionSort;
-import com.sortinganalyzer.sorting.MergeSort;
-import com.sortinganalyzer.sorting.QuickSort;
-import com.sortinganalyzer.sorting.ShellSort;
+import java.util.Locale;
 
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -21,15 +14,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-
-/**
- * Controls the Step 4 results view and evaluates the configured sorting
- * algorithms against the selected numeric column.
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
 
 /**
  * Step 4: displays the results produced on the Run Algorithms step.
