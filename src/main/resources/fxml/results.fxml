@@ -102,16 +102,16 @@
                                prefHeight="220"
                                minHeight="220"
                                styleClass="results-table">
+                        <columnResizePolicy>
+                            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                        </columnResizePolicy>
                         <placeholder>
                             <Label text="No performance results available."/>
                         </placeholder>
                         <columns>
                             <TableColumn fx:id="algoNameColumn" text="Algorithm" prefWidth="155"/>
-                            <TableColumn text="Execution Time (ms)" prefWidth="580">
+                            <TableColumn fx:id="executionGroupColumn" text="Execution Time (ms)" prefWidth="580">
                                 <columns>
-                                    <TableColumn fx:id="run1Column" text="Run 1" prefWidth="95"/>
-                                    <TableColumn fx:id="run2Column" text="Run 2" prefWidth="95"/>
-                                    <TableColumn fx:id="run3Column" text="Run 3" prefWidth="95"/>
                                     <TableColumn fx:id="avgColumn" text="Average" prefWidth="105"/>
                                     <TableColumn fx:id="minColumn" text="Min" prefWidth="95"/>
                                     <TableColumn fx:id="maxColumn" text="Max" prefWidth="95"/>

@@ -547,6 +547,11 @@
     -fx-border-color: #93C5FD;
 }
 
+.algorithm-card-selected {
+    -fx-background-color: #F5F9FF;
+    -fx-border-color: #93C5FD;
+}
+
 .algorithm-check-row {
     -fx-alignment: CENTER_LEFT;
     -fx-padding: 0 0 0 2;

@@ -12,8 +12,8 @@ import com.sortinganalyzer.sorting.MergeSort;
 import com.sortinganalyzer.sorting.QuickSort;
 import com.sortinganalyzer.sorting.ShellSort;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
@@ -25,363 +25,116 @@ import javafx.scene.control.cell.PropertyValueFactory;
 /**
  * Controls the Step 4 results view and evaluates the configured sorting
  * algorithms against the selected numeric column.
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+
+/**
+ * Step 4: displays the results produced on the Run Algorithms step.
+ * Rows are ordered from fastest to slowest average time, and one "Run N"
+ * column is created for each run that was executed.
  */
 public class ResultsController {
 
-    private static final int RUN_COUNT = 3;
-    private static final String TIME_FORMAT = "%.2f ms";
+    @FXML private Label bestAlgorithmNameLabel;
+    @FXML private Label bestAlgorithmTimeLabel;
+    @FXML private TableView<ResultRow> performanceTable;
+    @FXML private BarChart<String, Number> performanceChart;
 
-    @FXML
-    private Label bestAlgorithmNameLabel;
+    @FXML private TableColumn<ResultRow, String> algoNameColumn;
+    @FXML private TableColumn<ResultRow, ?> executionGroupColumn;
+    @FXML private TableColumn<ResultRow, String> avgColumn;
+    @FXML private TableColumn<ResultRow, String> minColumn;
+    @FXML private TableColumn<ResultRow, String> maxColumn;
 
-    @FXML
-    private Label bestAlgorithmTimeLabel;
-
-    @FXML
-    private TableView<AlgorithmResult> performanceTable;
-
-    @FXML
-    private BarChart<String, Number> performanceChart;
-
-    @FXML
-    private TableColumn<AlgorithmResult, String> algoNameColumn;
-
-    @FXML
-    private TableColumn<AlgorithmResult, String> run1Column;
-
-    @FXML
-    private TableColumn<AlgorithmResult, String> run2Column;
-
-    @FXML
-    private TableColumn<AlgorithmResult, String> run3Column;
-
-    @FXML
-    private TableColumn<AlgorithmResult, String> avgColumn;
-
-    @FXML
-    private TableColumn<AlgorithmResult, String> minColumn;
-
-    @FXML
-    private TableColumn<AlgorithmResult, String> maxColumn;
-
-    private int selectedRunCount = 3;
-
-    private final List<AlgorithmDefinition> algorithms = List.of(
-            new AlgorithmDefinition("Merge Sort", new MergeSort()::sort),
-            new AlgorithmDefinition("Quick Sort", new QuickSort()::sort),
-            new AlgorithmDefinition("Insertion Sort", new InsertionSort()::sort),
-            new AlgorithmDefinition("Shell Sort", new ShellSort()::sort),
-            new AlgorithmDefinition("Heap Sort", new HeapSort()::sort)
-    );
-
-    /**
-     * Configures the table columns after the FXML view has been loaded.
-     * Shows results already stored in the wizard state; if there are none,
-     * loads the selected CSV column and runs the benchmark.
-     */
     @FXML
     private void initialize() {
-        configureColumn(algoNameColumn, "algorithmName");
-        configureColumn(run1Column, "run1");
-        configureColumn(run2Column, "run2");
-        configureColumn(run3Column, "run3");
-        configureColumn(avgColumn, "average");
-        configureColumn(minColumn, "minimum");
-        configureColumn(maxColumn, "maximum");
-        selectedRunCount = Math.max(1, Math.min(RUN_COUNT, WizardState.get().runCountProperty().get()));
-        updateRunColumns();
+        configureFixedColumn(algoNameColumn, ResultRow::algorithmName);
+        configureFixedColumn(avgColumn, ResultRow::average);
+        configureFixedColumn(minColumn, ResultRow::minimum);
+        configureFixedColumn(maxColumn, ResultRow::maximum);
 
-        if (displayStoredResults()) {
+        List<WizardState.AlgorithmResult> stored = WizardState.get().algorithmResultsProperty().get();
+        if (stored == null || stored.isEmpty()) {
+            showEmpty();
             return;
         }
 
-        try {
-            double[] dataset = CsvLoader.loadNumericColumn(
-                    WizardState.get().selectedFileProperty().get(),
-                    WizardState.get().selectedColumnIndexProperty().get());
-            evaluatePerformance(dataset, selectedRunCount);
-        } catch (IOException | IllegalArgumentException exception) {
-            showLoadError(exception.getMessage());
-        }
-    }
+        // Fastest average first, so row 2 is the runner-up, row 3 the third best, and so on.
+        List<WizardState.AlgorithmResult> sorted = new ArrayList<>(stored);
+        sorted.sort(Comparator.comparingDouble(WizardState.AlgorithmResult::getAverageMs));
 
-    /**
-     * Benchmarks all supported algorithms using the selected run count and
-     * updates the results table and fastest-algorithm summary.
-     *
-     * @param dataset the numeric column to sort; it is never modified
-     * @throws IllegalArgumentException if {@code dataset} is {@code null}
-     */
-    public void evaluatePerformance(double[] dataset) {
-        if (dataset == null) {
-            throw new IllegalArgumentException("Dataset must not be null.");
-        }
+        int runs = sorted.stream()
+                .mapToInt(r -> r.getRunTimesNanos().size())
+                .max()
+                .orElse(0);
+        buildRunColumns(runs);
 
-        evaluatePerformance(dataset, selectedRunCount);
-    }
-
-    /**
-     * Evaluates the dataset using the requested number of benchmark runs.
-     *
-     * @param dataset the numeric column to sort; it is never modified
-     * @param runCount number of runs, from one through three
-     */
-    public void evaluatePerformance(double[] dataset, int runCount) {
-        if (dataset == null) {
-            throw new IllegalArgumentException("Dataset must not be null.");
-        }
-        if (runCount < 1 || runCount > RUN_COUNT) {
-            throw new IllegalArgumentException("Run count must be between 1 and 3.");
-        }
-        selectedRunCount = runCount;
-        updateRunColumns();
-
-        ObservableList<AlgorithmResult> results = FXCollections.observableArrayList();
-        AlgorithmResult bestResult = null;
-        List<WizardState.AlgorithmResult> sharedResults = new ArrayList<>();
-
-        for (AlgorithmDefinition algorithm : algorithms) {
-            double[] runTimes = new double[RUN_COUNT];
-            List<Long> runTimesNanos = new ArrayList<>(selectedRunCount);
-
-            for (int run = 0; run < selectedRunCount; run++) {
-                double[] input = dataset.clone();
-                long start = System.nanoTime();
-                algorithm.sort(input);
-                long elapsedNanos = System.nanoTime() - start;
-                runTimesNanos.add(elapsedNanos);
-                runTimes[run] = elapsedNanos / 1_000_000.0;
+        List<ResultRow> rows = new ArrayList<>();
+        for (WizardState.AlgorithmResult result : sorted) {
+            List<String> runTexts = new ArrayList<>();
+            for (int i = 0; i < runs; i++) {
+                runTexts.add(i < result.getRunTimesNanos().size()
+                        ? format(result.getRunTimesNanos().get(i) / 1_000_000.0)
+                        : "—");
             }
-
-            AlgorithmResult result = new AlgorithmResult(
-                    algorithm.name(),
-                    runTimes[0],
-                    runTimes[1],
-                    runTimes[2],
-                    selectedRunCount
-            );
-            results.add(result);
-            sharedResults.add(new WizardState.AlgorithmResult(
-                    algorithm.name(),
-                    runTimesNanos,
-                    result.averageValue(),
-                    result.minimumValue(),
-                    result.maximumValue()
-            ));
-
-            if (bestResult == null || result.averageValue() < bestResult.averageValue()) {
-                bestResult = result;
-            }
+            rows.add(new ResultRow(
+                    result.getAlgorithmName(),
+                    runTexts,
+                    format(result.getAverageMs()),
+                    format(result.getMinMs()),
+                    format(result.getMaxMs())));
         }
+        performanceTable.setItems(FXCollections.observableArrayList(rows));
 
-        if (performanceTable != null) {
-            performanceTable.setItems(results);
-        }
-        WizardState.get().setAlgorithmResults(sharedResults);
-        updateChart(results);
-        if (bestResult != null) {
-            if (bestAlgorithmNameLabel != null) {
-                bestAlgorithmNameLabel.setText(bestResult.algorithmName());
-            }
-            if (bestAlgorithmTimeLabel != null) {
-                bestAlgorithmTimeLabel.setText(bestResult.average());
-            }
-        }
-    }
+        WizardState.AlgorithmResult best = sorted.get(0);
+        bestAlgorithmNameLabel.setText(best.getAlgorithmName());
+        bestAlgorithmTimeLabel.setText(format(best.getAverageMs()) + " ms");
 
-    /**
-     * Displays results previously stored in the wizard state.
-     *
-     * @return {@code true} if stored results were found and displayed,
-     *         {@code false} if there was nothing stored
-     */
-    private boolean displayStoredResults() {
-        List<WizardState.AlgorithmResult> storedResults =
-                WizardState.get().algorithmResultsProperty().get();
-        if (storedResults == null || storedResults.isEmpty()) {
-            return false;
-        }
-
-        ObservableList<AlgorithmResult> results = FXCollections.observableArrayList();
-        AlgorithmResult bestResult = null;
-        for (WizardState.AlgorithmResult storedResult : storedResults) {
-            AlgorithmResult result = AlgorithmResult.fromStoredResult(storedResult);
-            results.add(result);
-            if (bestResult == null || result.averageValue() < bestResult.averageValue()) {
-                bestResult = result;
-            }
-        }
-
-        if (performanceTable != null) {
-            performanceTable.setItems(results);
-        }
-        updateChart(results);
-        if (bestResult != null) {
-            if (bestAlgorithmNameLabel != null) {
-                bestAlgorithmNameLabel.setText(bestResult.getAlgorithmName());
-            }
-            if (bestAlgorithmTimeLabel != null) {
-                bestAlgorithmTimeLabel.setText(bestResult.getAverage());
-            }
-        }
-        return true;
-    }
-
-    private void updateRunColumns() {
-        if (run1Column != null) run1Column.setVisible(selectedRunCount >= 1);
-        if (run2Column != null) run2Column.setVisible(selectedRunCount >= 2);
-        if (run3Column != null) run3Column.setVisible(selectedRunCount >= 3);
-    }
-
-    private void updateChart(ObservableList<AlgorithmResult> results) {
-        if (performanceChart == null) return;
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         series.setName("Average time");
-        for (AlgorithmResult result : results) {
-            series.getData().add(new XYChart.Data<>(result.getAlgorithmName(), result.averageValue()));
+        for (WizardState.AlgorithmResult result : sorted) {
+            series.getData().add(new XYChart.Data<>(result.getAlgorithmName(), result.getAverageMs()));
         }
         performanceChart.getData().setAll(series);
     }
 
-    private void showLoadError(String message) {
-        if (performanceTable != null) {
-            performanceTable.getItems().clear();
+    /** Creates Run 1.N columns, followed by Average, Min and Max, under the group header. */
+    private void buildRunColumns(int runs) {
+        List<TableColumn<ResultRow, ?>> columns = new ArrayList<>();
+        for (int i = 0; i < runs; i++) {
+            final int runIndex = i;
+            TableColumn<ResultRow, String> column = new TableColumn<>("Run " + (i + 1));
+            column.setSortable(false);
+            column.setCellValueFactory(cell ->
+                    new SimpleStringProperty(cell.getValue().runs().get(runIndex)));
+            columns.add(column);
         }
-        if (performanceChart != null) {
-            performanceChart.getData().clear();
-        }
-        if (bestAlgorithmNameLabel != null) {
-            bestAlgorithmNameLabel.setText("Unavailable");
-        }
-        if (bestAlgorithmTimeLabel != null) {
-            bestAlgorithmTimeLabel.setText(message == null ? "Unable to load dataset" : message);
-        }
+        columns.add(avgColumn);
+        columns.add(minColumn);
+        columns.add(maxColumn);
+        executionGroupColumn.getColumns().setAll(columns);
     }
 
-    private <T> void configureColumn(TableColumn<AlgorithmResult, T> column, String property) {
-        if (column != null) {
-            column.setCellValueFactory(new PropertyValueFactory<>(property));
-        }
+    private void configureFixedColumn(TableColumn<ResultRow, String> column,
+                                      java.util.function.Function<ResultRow, String> getter) {
+        column.setSortable(false);   // keep the fastest-to-slowest order fixed
+        column.setCellValueFactory(cell -> new SimpleStringProperty(getter.apply(cell.getValue())));
     }
 
-    private record AlgorithmDefinition(String name, Consumer<double[]> sorter) {
-        private void sort(double[] values) {
-            sorter.accept(values);
-        }
+    private void showEmpty() {
+        performanceTable.getItems().clear();
+        performanceChart.getData().clear();
+        bestAlgorithmNameLabel.setText("Unavailable");
+        bestAlgorithmTimeLabel.setText("No results to show");
     }
 
-    /**
-     * Immutable display row containing the timings and their summary.
-     */
-    public static final class AlgorithmResult {
-        private final String algorithmName;
-        private final String run1;
-        private final String run2;
-        private final String run3;
-        private final String average;
-        private final String minimum;
-        private final String maximum;
-        private final double averageValue;
-        private final double minimumValue;
-        private final double maximumValue;
-
-        private AlgorithmResult(String algorithmName, double run1, double run2, double run3, int runCount) {
-            this.algorithmName = algorithmName;
-            this.run1 = format(run1);
-            this.run2 = runCount >= 2 ? format(run2) : "—";
-            this.run3 = runCount >= 3 ? format(run3) : "—";
-            double total = run1 + (runCount >= 2 ? run2 : 0) + (runCount >= 3 ? run3 : 0);
-            this.averageValue = total / runCount;
-            this.average = format(averageValue);
-            this.minimumValue = runCount == 1 ? run1
-                    : runCount == 2 ? Math.min(run1, run2) : Math.min(run1, Math.min(run2, run3));
-            this.maximumValue = runCount == 1 ? run1
-                    : runCount == 2 ? Math.max(run1, run2) : Math.max(run1, Math.max(run2, run3));
-            this.minimum = format(minimumValue);
-            this.maximum = format(maximumValue);
-        }
-
-        private AlgorithmResult(String algorithmName, double[] runTimes, int runCount,
-                                double averageValue, double minimumValue, double maximumValue) {
-            this.algorithmName = algorithmName;
-            this.run1 = runCount >= 1 ? format(runTimes[0]) : "—";
-            this.run2 = runCount >= 2 ? format(runTimes[1]) : "—";
-            this.run3 = runCount >= 3 ? format(runTimes[2]) : "—";
-            this.averageValue = averageValue;
-            this.average = format(averageValue);
-            this.minimumValue = minimumValue;
-            this.minimum = format(minimumValue);
-            this.maximumValue = maximumValue;
-            this.maximum = format(maximumValue);
-        }
-
-        private static AlgorithmResult fromStoredResult(WizardState.AlgorithmResult storedResult) {
-            List<Long> runTimesNanos = storedResult.getRunTimesNanos();
-            double[] runTimesMs = new double[RUN_COUNT];
-            for (int index = 0; index < Math.min(RUN_COUNT, runTimesNanos.size()); index++) {
-                runTimesMs[index] = runTimesNanos.get(index) / 1_000_000.0;
-            }
-
-            return new AlgorithmResult(
-                    storedResult.getAlgorithmName(),
-                    runTimesMs,
-                    runTimesNanos.size(),
-                    storedResult.getAverageMs(),
-                    storedResult.getMinMs(),
-                    storedResult.getMaxMs()
-            );
-        }
-
-        public String getAlgorithmName() {
-            return algorithmName;
-        }
-
-        public String getRun1() {
-            return run1;
-        }
-
-        public String getRun2() {
-            return run2;
-        }
-
-        public String getRun3() {
-            return run3;
-        }
-
-        public String getAverage() {
-            return average;
-        }
-
-        public String getMinimum() {
-            return minimum;
-        }
-
-        public String getMaximum() {
-            return maximum;
-        }
-
-        private String algorithmName() {
-            return algorithmName;
-        }
-
-        private String average() {
-            return average;
-        }
-
-        private double averageValue() {
-            return averageValue;
-        }
-
-        private double minimumValue() {
-            return minimumValue;
-        }
-
-        private double maximumValue() {
-            return maximumValue;
-        }
-
-        private static String format(double milliseconds) {
-            return String.format(java.util.Locale.ROOT, TIME_FORMAT, milliseconds);
-        }
+    private static String format(double milliseconds) {
+        return String.format(Locale.ROOT, "%.3f", milliseconds);
     }
+
+    private record ResultRow(String algorithmName, List<String> runs,
+                             String average, String minimum, String maximum) { }
 }
