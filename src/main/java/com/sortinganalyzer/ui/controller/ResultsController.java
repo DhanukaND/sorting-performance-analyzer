@@ -1,4 +1,4 @@
-package com.sortinganalyzer.ui;
+package com.sortinganalyzer.ui.controller;
 
 import com.sortinganalyzer.csv.CsvLoader;
 import com.sortinganalyzer.sorting.HeapSort;
@@ -7,7 +7,6 @@ import com.sortinganalyzer.sorting.MergeSort;
 import com.sortinganalyzer.sorting.QuickSort;
 import com.sortinganalyzer.sorting.ShellSort;
 import com.sortinganalyzer.sorting.Sorter;
-import com.sortinganalyzer.ui.controller.WizardState;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
