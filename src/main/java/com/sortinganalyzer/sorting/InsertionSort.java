@@ -1,6 +1,6 @@
 package com.sortinganalyzer.sorting;
 
-public class InsertionSort {
+public class InsertionSort implements Sorter {
 
     public void sort(int[] values) {
         for (int i = 1; i < values.length; i++) {
@@ -14,6 +14,7 @@ public class InsertionSort {
         }
     }
 
+    @Override
     public void sort(double[] values) {
         for (int i = 1; i < values.length; i++) {
             double key = values[i];

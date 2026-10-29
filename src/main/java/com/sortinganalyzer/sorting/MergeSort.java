@@ -1,6 +1,6 @@
 package com.sortinganalyzer.sorting;
 
-public class MergeSort {
+public class MergeSort implements Sorter {
 
     public void sort(int[] values) {
         if (values == null || values.length < 2) return;
@@ -8,6 +8,7 @@ public class MergeSort {
         mergeSort(values, helper, 0, values.length - 1);
     }
 
+    @Override
     public void sort(double[] values) {
         if (values == null || values.length < 2) return;
         double[] helper = new double[values.length];
