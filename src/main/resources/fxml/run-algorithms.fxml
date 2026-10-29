@@ -5,205 +5,182 @@
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
 <StackPane xmlns:fx="http://javafx.com/fxml"
-           alignment="TOP_CENTER"
+           alignment="CENTER"
            minHeight="0"
-           maxHeight="Infinity"
            styleClass="run-algorithms-root"
            fx:controller="com.sortinganalyzer.ui.controller.RunAlgorithmsController">
 
     <padding>
-        <Insets top="8" right="40" bottom="6" left="40"/>
+        <Insets top="6" right="40" bottom="6" left="40"/>
     </padding>
 
-    <VBox spacing="10"
+    <VBox styleClass="run-main-card"
+          spacing="10"
           maxWidth="1100"
-          minHeight="0"
-          styleClass="run-algorithms-content">
+          maxHeight="-Infinity">
 
-        <!-- HEADER CARD -->
-        <VBox styleClass="wizard-header-card">
-            <HBox spacing="14" alignment="CENTER_LEFT">
-                <StackPane styleClass="header-icon-box">
-                    <FontIcon iconLiteral="fas-cog" iconSize="26" styleClass="header-icon"/>
+        <!-- HEADER -->
+        <HBox spacing="14" alignment="CENTER_LEFT" styleClass="run-header">
+            <StackPane styleClass="header-icon-box">
+                <FontIcon iconLiteral="fas-cog" iconSize="24" styleClass="header-icon"/>
+            </StackPane>
+            <VBox spacing="1">
+                <Label text="Run Algorithms" styleClass="page-title"/>
+                <Label text="Select sorting algorithms and configure the analysis settings."
+                       styleClass="page-subtitle"/>
+            </VBox>
+        </HBox>
+
+        <!-- SORTING ALGORITHMS PANEL -->
+        <VBox styleClass="panel-card" spacing="8">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <StackPane styleClass="panel-icon-box">
+                    <FontIcon iconLiteral="fas-list" iconSize="16" styleClass="panel-icon"/>
                 </StackPane>
-
-                <VBox spacing="2">
-                    <Label text="Run Algorithms" styleClass="page-title"/>
-                    <Label text="Select sorting algorithms and configure the analysis settings."
-                           styleClass="page-subtitle"/>
-                </VBox>
-            </HBox>
-        </VBox>
-
-        <!-- SORTING ALGORITHMS CARD -->
-        <VBox styleClass="panel-card">
-            <HBox spacing="12" alignment="CENTER_LEFT">
-                <StackPane styleClass="panel-icon-box panel-icon-box-blue">
-                    <FontIcon iconLiteral="fas-list" iconSize="20" styleClass="panel-icon"/>
-                </StackPane>
-
-                <VBox spacing="2">
+                <VBox spacing="0">
                     <Label text="Sorting Algorithms" styleClass="panel-title"/>
-                    <Label text="Choose the algorithms you want to run."
-                           styleClass="panel-subtitle"/>
+                    <Label text="Choose the algorithms you want to run." styleClass="panel-subtitle"/>
                 </VBox>
             </HBox>
 
-            <HBox spacing="12" alignment="CENTER" styleClass="algorithm-row">
+            <GridPane hgap="10" styleClass="algorithm-row">
+                <columnConstraints>
+                    <ColumnConstraints percentWidth="20" hgrow="ALWAYS"/>
+                    <ColumnConstraints percentWidth="20" hgrow="ALWAYS"/>
+                    <ColumnConstraints percentWidth="20" hgrow="ALWAYS"/>
+                    <ColumnConstraints percentWidth="20" hgrow="ALWAYS"/>
+                    <ColumnConstraints percentWidth="20" hgrow="ALWAYS"/>
+                </columnConstraints>
 
                 <!-- MERGE -->
-                <VBox fx:id="mergeCard"
-                      styleClass="algorithm-card"
-                      HBox.hgrow="ALWAYS"
-                      prefWidth="0" maxWidth="Infinity"
-                      prefHeight="132" minHeight="132" maxHeight="132"
+                <VBox fx:id="mergeCard" styleClass="algorithm-card"
+                      GridPane.columnIndex="0" maxWidth="Infinity"
+                      prefHeight="118" minHeight="118" maxHeight="118"
                       onMouseClicked="#toggleMergeCard">
                     <HBox styleClass="algorithm-check-row">
-                        <CheckBox fx:id="mergeCheck"
-                                  styleClass="algorithm-check"
-                                  selected="true"
-                                  mouseTransparent="true"
-                                  focusTraversable="false"/>
+                        <VBox.margin><Insets bottom="-18"/></VBox.margin>
+                        <CheckBox fx:id="mergeCheck" styleClass="algorithm-check"
+                                  selected="true" mouseTransparent="true" focusTraversable="false"/>
                     </HBox>
-                    <StackPane styleClass="algorithm-icon-wrap algorithm-icon-merge">
-                        <FontIcon iconLiteral="fas-code-branch" iconSize="22" styleClass="algorithm-icon"/>
+                    <StackPane styleClass="algorithm-icon-merge">
+                        <FontIcon iconLiteral="fas-code-branch" iconSize="20"/>
                     </StackPane>
                     <Label text="Merge Sort" styleClass="algorithm-name"/>
                     <Label text="Divide and conquer" wrapText="true" styleClass="algorithm-description"/>
                 </VBox>
 
                 <!-- QUICK -->
-                <VBox fx:id="quickCard"
-                      styleClass="algorithm-card"
-                      HBox.hgrow="ALWAYS"
-                      prefWidth="0" maxWidth="Infinity"
-                      prefHeight="132" minHeight="132" maxHeight="132"
+                <VBox fx:id="quickCard" styleClass="algorithm-card"
+                      GridPane.columnIndex="1" maxWidth="Infinity"
+                      prefHeight="118" minHeight="118" maxHeight="118"
                       onMouseClicked="#toggleQuickCard">
                     <HBox styleClass="algorithm-check-row">
-                        <CheckBox fx:id="quickCheck"
-                                  styleClass="algorithm-check"
-                                  selected="true"
-                                  mouseTransparent="true"
-                                  focusTraversable="false"/>
+                        <VBox.margin><Insets bottom="-18"/></VBox.margin>
+                        <CheckBox fx:id="quickCheck" styleClass="algorithm-check"
+                                  selected="true" mouseTransparent="true" focusTraversable="false"/>
                     </HBox>
-                    <StackPane styleClass="algorithm-icon-wrap algorithm-icon-quick">
-                        <FontIcon iconLiteral="fas-random" iconSize="22" styleClass="algorithm-icon"/>
+                    <StackPane styleClass="algorithm-icon-quick">
+                        <FontIcon iconLiteral="fas-random" iconSize="20"/>
                     </StackPane>
                     <Label text="Quick Sort" styleClass="algorithm-name"/>
                     <Label text="Partition-based sorting" wrapText="true" styleClass="algorithm-description"/>
                 </VBox>
 
                 <!-- INSERTION -->
-                <VBox fx:id="insertionCard"
-                      styleClass="algorithm-card"
-                      HBox.hgrow="ALWAYS"
-                      prefWidth="0" maxWidth="Infinity"
-                      prefHeight="132" minHeight="132" maxHeight="132"
+                <VBox fx:id="insertionCard" styleClass="algorithm-card"
+                      GridPane.columnIndex="2" maxWidth="Infinity"
+                      prefHeight="118" minHeight="118" maxHeight="118"
                       onMouseClicked="#toggleInsertionCard">
                     <HBox styleClass="algorithm-check-row">
-                        <CheckBox fx:id="insertionCheck"
-                                  styleClass="algorithm-check"
-                                  selected="true"
-                                  mouseTransparent="true"
-                                  focusTraversable="false"/>
+                        <VBox.margin><Insets bottom="-18"/></VBox.margin>
+                        <CheckBox fx:id="insertionCheck" styleClass="algorithm-check"
+                                  selected="true" mouseTransparent="true" focusTraversable="false"/>
                     </HBox>
-                    <StackPane styleClass="algorithm-icon-wrap algorithm-icon-insertion">
-                        <FontIcon iconLiteral="fas-list-ol" iconSize="22" styleClass="algorithm-icon"/>
+                    <StackPane styleClass="algorithm-icon-insertion">
+                        <FontIcon iconLiteral="fas-list-ol" iconSize="20"/>
                     </StackPane>
                     <Label text="Insertion Sort" styleClass="algorithm-name"/>
-                    <Label text="Builds sorted order one item at a time" wrapText="true" styleClass="algorithm-description"/>
+                    <Label text="Builds sorted order one item at a time" wrapText="true"
+                           styleClass="algorithm-description"/>
                 </VBox>
 
                 <!-- SHELL -->
-                <VBox fx:id="shellCard"
-                      styleClass="algorithm-card"
-                      HBox.hgrow="ALWAYS"
-                      prefWidth="0" maxWidth="Infinity"
-                      prefHeight="132" minHeight="132" maxHeight="132"
+                <VBox fx:id="shellCard" styleClass="algorithm-card"
+                      GridPane.columnIndex="3" maxWidth="Infinity"
+                      prefHeight="118" minHeight="118" maxHeight="118"
                       onMouseClicked="#toggleShellCard">
                     <HBox styleClass="algorithm-check-row">
-                        <CheckBox fx:id="shellCheck"
-                                  styleClass="algorithm-check"
-                                  selected="true"
-                                  mouseTransparent="true"
-                                  focusTraversable="false"/>
+                        <VBox.margin><Insets bottom="-18"/></VBox.margin>
+                        <CheckBox fx:id="shellCheck" styleClass="algorithm-check"
+                                  selected="true" mouseTransparent="true" focusTraversable="false"/>
                     </HBox>
-                    <StackPane styleClass="algorithm-icon-wrap algorithm-icon-shell">
-                        <FontIcon iconLiteral="fas-sort" iconSize="22" styleClass="algorithm-icon"/>
+                    <StackPane styleClass="algorithm-icon-shell">
+                        <FontIcon iconLiteral="fas-sort" iconSize="20"/>
                     </StackPane>
                     <Label text="Shell Sort" styleClass="algorithm-name"/>
                     <Label text="Insertion sort with gaps" wrapText="true" styleClass="algorithm-description"/>
                 </VBox>
 
                 <!-- HEAP -->
-                <VBox fx:id="heapCard"
-                      styleClass="algorithm-card"
-                      HBox.hgrow="ALWAYS"
-                      prefWidth="0" maxWidth="Infinity"
-                      prefHeight="132" minHeight="132" maxHeight="132"
+                <VBox fx:id="heapCard" styleClass="algorithm-card"
+                      GridPane.columnIndex="4" maxWidth="Infinity"
+                      prefHeight="118" minHeight="118" maxHeight="118"
                       onMouseClicked="#toggleHeapCard">
                     <HBox styleClass="algorithm-check-row">
-                        <CheckBox fx:id="heapCheck"
-                                  styleClass="algorithm-check"
-                                  selected="true"
-                                  mouseTransparent="true"
-                                  focusTraversable="false"/>
+                        <VBox.margin><Insets bottom="-18"/></VBox.margin>
+                        <CheckBox fx:id="heapCheck" styleClass="algorithm-check"
+                                  selected="true" mouseTransparent="true" focusTraversable="false"/>
                     </HBox>
-                    <StackPane styleClass="algorithm-icon-wrap algorithm-icon-heap">
-                        <FontIcon iconLiteral="fas-project-diagram" iconSize="22" styleClass="algorithm-icon"/>
+                    <StackPane styleClass="algorithm-icon-heap">
+                        <FontIcon iconLiteral="fas-project-diagram" iconSize="20"/>
                     </StackPane>
                     <Label text="Heap Sort" styleClass="algorithm-name"/>
                     <Label text="Tree-based sorting" wrapText="true" styleClass="algorithm-description"/>
                 </VBox>
-
-            </HBox>
+            </GridPane>
         </VBox>
 
-        <!-- EXECUTION SETTINGS CARD -->
-        <VBox styleClass="panel-card execution-card">
-            <HBox spacing="12" alignment="CENTER_LEFT">
-                <StackPane styleClass="panel-icon-box panel-icon-box-blue">
-                    <FontIcon iconLiteral="fas-sliders-h" iconSize="20" styleClass="panel-icon"/>
+        <!-- EXECUTION SETTINGS PANEL -->
+        <VBox styleClass="panel-card" spacing="8">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <StackPane styleClass="panel-icon-box">
+                    <FontIcon iconLiteral="fas-sliders-h" iconSize="16" styleClass="panel-icon"/>
                 </StackPane>
-
-                <VBox spacing="2">
+                <VBox spacing="0">
                     <Label text="Execution Settings" styleClass="panel-title"/>
-                    <Label text="Configure the dataset size and number of runs."
-                           styleClass="panel-subtitle"/>
+                    <Label text="Configure the dataset size and number of runs." styleClass="panel-subtitle"/>
                 </VBox>
             </HBox>
 
-            <HBox spacing="20" alignment="CENTER_LEFT" styleClass="settings-row">
-                <VBox styleClass="settings-column" HBox.hgrow="ALWAYS">
+            <HBox spacing="24" styleClass="settings-row">
+                <VBox styleClass="settings-column" spacing="5" HBox.hgrow="ALWAYS">
                     <Label text="Data Size" styleClass="settings-label"/>
-                    <Spinner fx:id="dataSizeSpinner" editable="true" maxWidth="Infinity"/>
+                    <Spinner fx:id="dataSizeSpinner" editable="true"
+                             styleClass="settings-spinner" prefWidth="150" maxWidth="150"/>
                     <Label fx:id="dataSizeHint" text="Total rows: 0" styleClass="settings-hint"/>
                 </VBox>
 
-                <Region styleClass="settings-divider" prefWidth="1" minWidth="1" maxWidth="1"/>
+                <Region styleClass="settings-divider"
+                        prefWidth="1" minWidth="1" maxWidth="1" maxHeight="Infinity"/>
 
-                <VBox styleClass="settings-column" HBox.hgrow="ALWAYS">
+                <VBox styleClass="settings-column" spacing="5" HBox.hgrow="ALWAYS">
                     <Label text="Number of Runs" styleClass="settings-label"/>
-                    <Spinner fx:id="runCountSpinner" editable="true" maxWidth="Infinity"/>
+                    <Spinner fx:id="runCountSpinner" editable="true"
+                             min="1" max="5" initialValue="3"
+                             styleClass="settings-spinner" prefWidth="150" maxWidth="150"/>
                     <Label text="Repeat each algorithm to compare average execution times."
                            styleClass="settings-hint"/>
                 </VBox>
             </HBox>
 
-            <Label fx:id="errorLabel"
-                   styleClass="validation-error"
-                   managed="false"
-                   visible="false"/>
+            <Label fx:id="errorLabel" styleClass="validation-error" managed="false" visible="false"/>
         </VBox>
 
     </VBox>
 
-    <!-- Overlay shown by the controller while the analysis runs -->
     <ProgressIndicator fx:id="progressIndicator"
                        visible="false"
-                       maxWidth="-Infinity"
-                       maxHeight="-Infinity"
-                       prefWidth="48"
-                       prefHeight="48"
+                       maxWidth="-Infinity" maxHeight="-Infinity"
+                       prefWidth="48" prefHeight="48"
                        StackPane.alignment="CENTER"/>
 </StackPane>

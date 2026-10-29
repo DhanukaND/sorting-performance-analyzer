@@ -5,6 +5,7 @@ import com.sortinganalyzer.sorting.InsertionSort;
 import com.sortinganalyzer.sorting.MergeSort;
 import com.sortinganalyzer.sorting.QuickSort;
 import com.sortinganalyzer.sorting.ShellSort;
+import com.sortinganalyzer.sorting.Sorter;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ObservableBooleanValue;
@@ -23,8 +24,7 @@ import java.util.List;
 
 public class RunAlgorithmsController implements WizardStep {
 
-    private static final int DEFAULT_RUNS = 3;
-    private static final int MAX_RUNS = 10;
+    private static final int MAX_RUNS = 5;
 
     @FXML private VBox mergeCard;
     @FXML private VBox quickCard;
@@ -49,21 +49,32 @@ public class RunAlgorithmsController implements WizardStep {
 
     @FXML
     private void initialize() {
-        configureSpinner(dataSizeSpinner, 1, 1, 1);
-        configureSpinner(runCountSpinner, DEFAULT_RUNS, 1, MAX_RUNS);
+        WizardState state = WizardState.get();
 
+        // Restore the previously saved settings (defaults on first visit).
+        int savedRuns = Math.max(1, Math.min(MAX_RUNS, state.runCountProperty().get()));
+        configureSpinner(dataSizeSpinner, 1, 1, 1);
+        configureSpinner(runCountSpinner, savedRuns, 1, MAX_RUNS);
+        runCountSpinner.valueProperty().addListener((obs, oldValue, newValue) -> {
+            if (newValue != null) {
+                state.runCountProperty().set(newValue);
+            }
+        });
+        state.runCountProperty().set(savedRuns);
+
+        restoreAlgorithmSelection();
+
+        // Listeners are attached after restoring so the restore itself doesn't overwrite the saved state.
         bindCardSelection(mergeCard, mergeCheck);
         bindCardSelection(quickCard, quickCheck);
         bindCardSelection(insertionCard, insertionCheck);
         bindCardSelection(shellCard, shellCheck);
         bindCardSelection(heapCard, heapCheck);
 
-        applyDefaultSelection();
         refreshDataSizeBounds();
         syncSelectionState();
 
-        // Keep the data size bounds in sync if the selected column changes later.
-        WizardState.get().selectedColumnValuesProperty()
+        state.selectedColumnValuesProperty()
                 .addListener((obs, oldValue, newValue) -> refreshDataSizeBounds());
     }
 
@@ -79,10 +90,6 @@ public class RunAlgorithmsController implements WizardStep {
         return "Run Algorithms";
     }
 
-    /**
-     * Starts the analysis in the background. Returns false so the wizard does not
-     * advance by itself; navigation happens through the callback once results exist.
-     */
     @Override
     public boolean onNext() {
         runAnalysis();
@@ -93,14 +100,17 @@ public class RunAlgorithmsController implements WizardStep {
         this.navigationCallback = callback;
     }
 
-    /** Call this each time the step is shown, in case the selected column changed. */
+    /** Rebuilds the data size spinner, keeping the saved size when it is still valid. */
     public void refreshDataSizeBounds() {
         List<Double> values = WizardState.get().selectedColumnValuesProperty().get();
         int totalRows = values == null ? 0 : values.size();
         int max = Math.max(1, totalRows);
 
+        int saved = WizardState.get().datasetSizeProperty().get();
+        int initial = (saved >= 1 && saved <= max) ? saved : max;
+
         SpinnerValueFactory.IntegerSpinnerValueFactory factory =
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, max, max);
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, max, initial);
         factory.valueProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue != null) {
                 WizardState.get().datasetSizeProperty().set(newValue);
@@ -114,54 +124,47 @@ public class RunAlgorithmsController implements WizardStep {
 
     // ===== Card toggling =====
 
-    @FXML
-    private void toggleMergeCard(MouseEvent event) {
-        mergeCheck.setSelected(!mergeCheck.isSelected());
-    }
+    @FXML private void toggleMergeCard(MouseEvent event)     { mergeCheck.setSelected(!mergeCheck.isSelected()); }
+    @FXML private void toggleQuickCard(MouseEvent event)     { quickCheck.setSelected(!quickCheck.isSelected()); }
+    @FXML private void toggleInsertionCard(MouseEvent event) { insertionCheck.setSelected(!insertionCheck.isSelected()); }
+    @FXML private void toggleShellCard(MouseEvent event)     { shellCheck.setSelected(!shellCheck.isSelected()); }
+    @FXML private void toggleHeapCard(MouseEvent event)      { heapCheck.setSelected(!heapCheck.isSelected()); }
 
-    @FXML
-    private void toggleQuickCard(MouseEvent event) {
-        quickCheck.setSelected(!quickCheck.isSelected());
-    }
-
-    @FXML
-    private void toggleInsertionCard(MouseEvent event) {
-        insertionCheck.setSelected(!insertionCheck.isSelected());
-    }
-
-    @FXML
-    private void toggleShellCard(MouseEvent event) {
-        shellCheck.setSelected(!shellCheck.isSelected());
-    }
-
-    @FXML
-    private void toggleHeapCard(MouseEvent event) {
-        heapCheck.setSelected(!heapCheck.isSelected());
+    private void restoreAlgorithmSelection() {
+        List<String> saved = WizardState.get().selectedAlgorithmsProperty().get();
+        mergeCheck.setSelected(saved.contains(WizardState.MERGE_SORT));
+        quickCheck.setSelected(saved.contains(WizardState.QUICK_SORT));
+        insertionCheck.setSelected(saved.contains(WizardState.INSERTION_SORT));
+        shellCheck.setSelected(saved.contains(WizardState.SHELL_SORT));
+        heapCheck.setSelected(saved.contains(WizardState.HEAP_SORT));
     }
 
     private void bindCardSelection(VBox card, CheckBox checkBox) {
+        updateCardStyle(card, checkBox.isSelected());
         checkBox.selectedProperty().addListener((obs, oldValue, newValue) -> {
-            card.getStyleClass().remove("algorithm-card-selected");
-            if (Boolean.TRUE.equals(newValue)) {
-                card.getStyleClass().add("algorithm-card-selected");
-            }
+            updateCardStyle(card, Boolean.TRUE.equals(newValue));
             syncSelectionState();
         });
     }
 
-    private void syncSelectionState() {
-        hasSelection.set(
-                mergeCheck.isSelected() || quickCheck.isSelected() || insertionCheck.isSelected()
-                        || shellCheck.isSelected() || heapCheck.isSelected()
-        );
+    private void updateCardStyle(VBox card, boolean selected) {
+        card.getStyleClass().remove("algorithm-card-selected");
+        if (selected) {
+            card.getStyleClass().add("algorithm-card-selected");
+        }
     }
 
-    private void applyDefaultSelection() {
-        mergeCheck.setSelected(true);
-        quickCheck.setSelected(true);
-        insertionCheck.setSelected(true);
-        shellCheck.setSelected(true);
-        heapCheck.setSelected(true);
+    /** Updates the Next button state and saves the current selection. */
+    private void syncSelectionState() {
+        List<String> names = new ArrayList<>();
+        if (mergeCheck.isSelected()) names.add(WizardState.MERGE_SORT);
+        if (quickCheck.isSelected()) names.add(WizardState.QUICK_SORT);
+        if (insertionCheck.isSelected()) names.add(WizardState.INSERTION_SORT);
+        if (shellCheck.isSelected()) names.add(WizardState.SHELL_SORT);
+        if (heapCheck.isSelected()) names.add(WizardState.HEAP_SORT);
+
+        WizardState.get().setSelectedAlgorithms(names);
+        hasSelection.set(!names.isEmpty());
     }
 
     // ===== Spinners =====
@@ -176,7 +179,6 @@ public class RunAlgorithmsController implements WizardStep {
         });
     }
 
-    /** Applies the text typed in the editor to the value factory, clamped to its bounds. */
     private void commitSpinner(Spinner<Integer> spinner) {
         if (!(spinner.getValueFactory() instanceof SpinnerValueFactory.IntegerSpinnerValueFactory factory)) {
             return;
@@ -198,11 +200,6 @@ public class RunAlgorithmsController implements WizardStep {
         commitSpinner(dataSizeSpinner);
         commitSpinner(runCountSpinner);
 
-        if (!hasSelection.get()) {
-            showError("Select at least one algorithm to run.");
-            return;
-        }
-
         List<Double> columnValues = WizardState.get().selectedColumnValuesProperty().get();
         if (columnValues == null || columnValues.isEmpty()) {
             showError("No numeric values are available for the selected column.");
@@ -216,18 +213,22 @@ public class RunAlgorithmsController implements WizardStep {
             return;
         }
 
-        int runs = runCountSpinner.getValue() == null ? DEFAULT_RUNS : runCountSpinner.getValue();
+        int runs = runCountSpinner.getValue() == null ? WizardState.DEFAULT_RUNS : runCountSpinner.getValue();
         if (runs < 1 || runs > MAX_RUNS) {
             showError("Number of runs must be between 1 and " + MAX_RUNS + ".");
             return;
         }
 
-        List<Double> sourceData = new ArrayList<>(columnValues.subList(0, dataSize));
-
         List<AlgorithmSpec> selected = collectSelectedAlgorithms();
         if (selected.isEmpty()) {
             showError("Select at least one algorithm to run.");
             return;
+        }
+
+        // Primitive source array, built once; every run sorts its own fresh clone.
+        double[] source = new double[dataSize];
+        for (int i = 0; i < dataSize; i++) {
+            source[i] = columnValues.get(i);
         }
 
         progressIndicator.setVisible(true);
@@ -236,31 +237,28 @@ public class RunAlgorithmsController implements WizardStep {
         Task<List<WizardState.AlgorithmResult>> task = new Task<>() {
             @Override
             protected List<WizardState.AlgorithmResult> call() {
-                List<WizardState.AlgorithmResult> localResults = new ArrayList<>();
+                List<WizardState.AlgorithmResult> results = new ArrayList<>();
                 for (AlgorithmSpec spec : selected) {
-                    // Warm-up on a throwaway copy so the JIT is ready and timed runs get unsorted data.
-                    spec.sorter().sort(new ArrayList<>(sourceData));
+                    // Untimed warm-up so JIT compilation doesn't distort the first measured run.
+                    spec.sorter().sort(source.clone());
 
                     List<Long> runTimesNanos = new ArrayList<>();
                     for (int i = 0; i < runs; i++) {
-                        List<Double> freshData = new ArrayList<>(sourceData);
+                        double[] data = source.clone();   // copy happens outside the timed section
                         long start = System.nanoTime();
-                        spec.sorter().sort(freshData);
+                        spec.sorter().sort(data);
                         runTimesNanos.add(System.nanoTime() - start);
                     }
 
-                    long average = (long) runTimesNanos.stream().mapToLong(Long::longValue).average().orElse(0L);
+                    double average = runTimesNanos.stream().mapToLong(Long::longValue).average().orElse(0);
                     long min = runTimesNanos.stream().mapToLong(Long::longValue).min().orElse(0L);
                     long max = runTimesNanos.stream().mapToLong(Long::longValue).max().orElse(0L);
-                    localResults.add(new WizardState.AlgorithmResult(
-                            spec.name(),
-                            runTimesNanos,
-                            nanosToMs(average),
-                            nanosToMs(min),
-                            nanosToMs(max)
-                    ));
+
+                    results.add(new WizardState.AlgorithmResult(
+                            spec.name(), runTimesNanos,
+                            nanosToMs(average), nanosToMs(min), nanosToMs(max)));
                 }
-                return localResults;
+                return results;
             }
         };
 
@@ -289,6 +287,16 @@ public class RunAlgorithmsController implements WizardStep {
         thread.start();
     }
 
+    private List<AlgorithmSpec> collectSelectedAlgorithms() {
+        List<AlgorithmSpec> selected = new ArrayList<>();
+        if (mergeCheck.isSelected()) selected.add(new AlgorithmSpec(WizardState.MERGE_SORT, new MergeSort()));
+        if (quickCheck.isSelected()) selected.add(new AlgorithmSpec(WizardState.QUICK_SORT, new QuickSort()));
+        if (insertionCheck.isSelected()) selected.add(new AlgorithmSpec(WizardState.INSERTION_SORT, new InsertionSort()));
+        if (shellCheck.isSelected()) selected.add(new AlgorithmSpec(WizardState.SHELL_SORT, new ShellSort()));
+        if (heapCheck.isSelected()) selected.add(new AlgorithmSpec(WizardState.HEAP_SORT, new HeapSort()));
+        return selected;
+    }
+
     private void setControlsDisabled(boolean disabled) {
         dataSizeSpinner.setDisable(disabled);
         runCountSpinner.setDisable(disabled);
@@ -311,45 +319,9 @@ public class RunAlgorithmsController implements WizardStep {
         errorLabel.setManaged(false);
     }
 
-    private List<AlgorithmSpec> collectSelectedAlgorithms() {
-        List<AlgorithmSpec> selected = new ArrayList<>();
-        if (mergeCheck.isSelected()) selected.add(new AlgorithmSpec("Merge Sort", values -> sortWith(new MergeSort(), values)));
-        if (quickCheck.isSelected()) selected.add(new AlgorithmSpec("Quick Sort", values -> sortWith(new QuickSort(), values)));
-        if (insertionCheck.isSelected()) selected.add(new AlgorithmSpec("Insertion Sort", values -> sortWith(new InsertionSort(), values)));
-        if (shellCheck.isSelected()) selected.add(new AlgorithmSpec("Shell Sort", values -> sortWith(new ShellSort(), values)));
-        if (heapCheck.isSelected()) selected.add(new AlgorithmSpec("Heap Sort", values -> sortWith(new HeapSort(), values)));
-        return selected;
-    }
-
-    private static void sortWith(Object sorter, List<Double> values) {
-        try {
-            double[] array = values.stream().mapToDouble(Double::doubleValue).toArray();
-            if (sorter instanceof MergeSort mergeSort) {
-                mergeSort.sort(array);
-            } else if (sorter instanceof QuickSort quickSort) {
-                quickSort.sort(array);
-            } else if (sorter instanceof InsertionSort insertionSort) {
-                insertionSort.sort(array);
-            } else if (sorter instanceof ShellSort shellSort) {
-                shellSort.sort(array);
-            } else if (sorter instanceof HeapSort heapSort) {
-                heapSort.sort(array);
-            }
-            for (int i = 0; i < array.length; i++) {
-                values.set(i, array[i]);
-            }
-        } catch (Exception e) {
-            throw new IllegalStateException("Failed to sort data with " + sorter.getClass().getSimpleName(), e);
-        }
-    }
-
-    private static double nanosToMs(long nanos) {
+    private static double nanosToMs(double nanos) {
         return nanos / 1_000_000.0;
     }
 
-    private interface DataSorter {
-        void sort(List<Double> values);
-    }
-
-    private record AlgorithmSpec(String name, DataSorter sorter) { }
+    private record AlgorithmSpec(String name, Sorter sorter) { }
 }

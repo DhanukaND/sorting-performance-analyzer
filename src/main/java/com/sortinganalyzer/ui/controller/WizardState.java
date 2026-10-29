@@ -12,6 +12,17 @@ import javafx.beans.property.StringProperty;
 
 public class WizardState {
 
+    public static final String MERGE_SORT = "Merge Sort";
+    public static final String QUICK_SORT = "Quick Sort";
+    public static final String INSERTION_SORT = "Insertion Sort";
+    public static final String SHELL_SORT = "Shell Sort";
+    public static final String HEAP_SORT = "Heap Sort";
+
+    public static final List<String> ALL_ALGORITHMS =
+            List.of(MERGE_SORT, QUICK_SORT, INSERTION_SORT, SHELL_SORT, HEAP_SORT);
+
+    public static final int DEFAULT_RUNS = 3;
+
     public static final class AlgorithmResult {
         private final String algorithmName;
         private final List<Long> runTimesNanos;
@@ -47,7 +58,8 @@ public class WizardState {
     private final ObjectProperty<List<List<String>>> parsedRows = new SimpleObjectProperty<>(List.of());
     private final ObjectProperty<List<Double>> selectedColumnValues = new SimpleObjectProperty<>(List.of());
     private final IntegerProperty datasetSize = new SimpleIntegerProperty(0);
-    private final IntegerProperty runCount = new SimpleIntegerProperty(3);
+    private final IntegerProperty runCount = new SimpleIntegerProperty(DEFAULT_RUNS);
+    private final ObjectProperty<List<String>> selectedAlgorithms = new SimpleObjectProperty<>(ALL_ALGORITHMS);
     private final ObjectProperty<List<AlgorithmResult>> algorithmResults = new SimpleObjectProperty<>(List.of());
 
     private WizardState() { }
@@ -59,6 +71,7 @@ public class WizardState {
     public ObjectProperty<List<Double>> selectedColumnValuesProperty() { return selectedColumnValues; }
     public IntegerProperty datasetSizeProperty() { return datasetSize; }
     public IntegerProperty runCountProperty() { return runCount; }
+    public ObjectProperty<List<String>> selectedAlgorithmsProperty() { return selectedAlgorithms; }
     public ObjectProperty<List<AlgorithmResult>> algorithmResultsProperty() { return algorithmResults; }
 
     public void setParsedRows(List<List<String>> rows) {
@@ -67,6 +80,10 @@ public class WizardState {
 
     public void setSelectedColumnValues(List<Double> values) {
         selectedColumnValues.set(values == null ? List.of() : List.copyOf(values));
+    }
+
+    public void setSelectedAlgorithms(List<String> names) {
+        selectedAlgorithms.set(names == null ? List.of() : List.copyOf(names));
     }
 
     public void setAlgorithmResults(List<AlgorithmResult> results) {
@@ -80,7 +97,8 @@ public class WizardState {
         parsedRows.set(List.of());
         selectedColumnValues.set(List.of());
         datasetSize.set(0);
-        runCount.set(3);
+        runCount.set(DEFAULT_RUNS);
+        selectedAlgorithms.set(ALL_ALGORITHMS);
         algorithmResults.set(List.of());
     }
 }
