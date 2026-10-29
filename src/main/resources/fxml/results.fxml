@@ -17,7 +17,7 @@
 <StackPane xmlns:fx="http://javafx.com/fxml"
            alignment="CENTER"
            styleClass="results-screen"
-           fx:controller="com.sortinganalyzer.ui.ResultController">
+           fx:controller="com.sortinganalyzer.ui.ResultsController">
     <ScrollPane fitToWidth="true"
                 hbarPolicy="NEVER"
                 styleClass="results-scroll">
