@@ -97,12 +97,24 @@ public class ColumnSelectionController implements WizardStep {
 
             for (int i = 0; i < titles.size(); i++) {
                 final int col = i;
-                TableColumn<ObservableList<String>, String> column = new TableColumn<>(titles.get(i));
+                String title = titles.get(i);
+                TableColumn<ObservableList<String>, String> column = new TableColumn<>(title);
                 column.setSortable(false);
                 column.setCellValueFactory(cell -> new SimpleStringProperty(
                         col < cell.getValue().size() ? cell.getValue().get(col) : ""));
+
+                // width based on header length, so long names aren't truncated
+                column.setMinWidth(80);
+                column.setPrefWidth(Math.min(220, Math.max(100, title.length() * 9 + 32)));
+
                 previewTable.getColumns().add(column);
             }
+
+            // few columns: stretch to fill the table; many columns: keep widths and scroll sideways
+            previewTable.setColumnResizePolicy(
+                    titles.size() <= 8
+                            ? TableView.CONSTRAINED_RESIZE_POLICY
+                            : TableView.UNCONSTRAINED_RESIZE_POLICY);
 
             ObservableList<ObservableList<String>> rows = FXCollections.observableArrayList();
             long totalRows = 0;
