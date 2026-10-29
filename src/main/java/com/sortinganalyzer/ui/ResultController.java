@@ -1,6 +1,5 @@
 package com.sortinganalyzer.ui;
 
-import com.sortinganalyzer.csv.CsvLoader;
 import com.sortinganalyzer.sorting.HeapSort;
 import com.sortinganalyzer.sorting.InsertionSort;
 import com.sortinganalyzer.sorting.MergeSort;
@@ -17,7 +16,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -90,12 +88,7 @@ public class ResultController {
         configureColumn(maxColumn, "maximum");
         selectedRunCount = Math.max(1, Math.min(RUN_COUNT, WizardState.get().runCountProperty().get()));
         updateRunColumns();
-        try {
-            double[] dataset = loadSelectedDataset();
-            evaluatePerformance(dataset, selectedRunCount);
-        } catch (IOException | IllegalArgumentException exception) {
-            showLoadError(exception.getMessage());
-        }
+        displayStoredResults();
     }
 
     /**
@@ -182,23 +175,28 @@ public class ResultController {
         }
     }
 
-    private double[] loadSelectedDataset() throws IOException {
-        List<Double> selectedValues = WizardState.get().selectedColumnValuesProperty().get();
-        if (selectedValues != null && !selectedValues.isEmpty()) {
-            double[] dataset = new double[selectedValues.size()];
-            for (int index = 0; index < selectedValues.size(); index++) {
-                Double value = selectedValues.get(index);
-                if (value == null || !Double.isFinite(value)) {
-                    throw new IllegalArgumentException("The selected column contains invalid numeric data.");
-                }
-                dataset[index] = value;
-            }
-            return dataset;
+    private void displayStoredResults() {
+        List<WizardState.AlgorithmResult> storedResults =
+                WizardState.get().algorithmResultsProperty().get();
+        if (storedResults == null || storedResults.isEmpty()) {
+            showLoadError("No performance results available.");
+            return;
         }
 
-        return CsvLoader.loadNumericColumn(
-                WizardState.get().selectedFileProperty().get(),
-                WizardState.get().selectedColumnIndexProperty().get());
+        ObservableList<AlgorithmResult> results = FXCollections.observableArrayList();
+        AlgorithmResult bestResult = null;
+        for (WizardState.AlgorithmResult storedResult : storedResults) {
+            AlgorithmResult result = AlgorithmResult.fromStoredResult(storedResult);
+            results.add(result);
+            if (bestResult == null || result.averageValue() < bestResult.averageValue()) {
+                bestResult = result;
+            }
+        }
+
+        performanceTable.setItems(results);
+        updateChart(results);
+        bestAlgorithmNameLabel.setText(bestResult.getAlgorithmName());
+        bestAlgorithmTimeLabel.setText(bestResult.getAverage());
     }
 
     private void updateRunColumns() {
@@ -272,6 +270,37 @@ public class ResultController {
             maximumValue = runCount == 1 ? run1
                     : runCount == 2 ? Math.max(run1, run2) : Math.max(run1, Math.max(run2, run3));
             this.minimum = format(minimumValue);
+            this.maximum = format(maximumValue);
+        }
+
+        private static AlgorithmResult fromStoredResult(WizardState.AlgorithmResult storedResult) {
+            List<Long> runTimesNanos = storedResult.getRunTimesNanos();
+            double[] runTimesMs = new double[RUN_COUNT];
+            for (int index = 0; index < Math.min(RUN_COUNT, runTimesNanos.size()); index++) {
+                runTimesMs[index] = runTimesNanos.get(index) / 1_000_000.0;
+            }
+
+            return new AlgorithmResult(
+                    storedResult.getAlgorithmName(),
+                    runTimesMs,
+                    runTimesNanos.size(),
+                    storedResult.getAverageMs(),
+                    storedResult.getMinMs(),
+                    storedResult.getMaxMs()
+            );
+        }
+
+        private AlgorithmResult(String algorithmName, double[] runTimes, int runCount,
+                                double averageValue, double minimumValue, double maximumValue) {
+            this.algorithmName = algorithmName;
+            this.run1 = runCount >= 1 ? format(runTimes[0]) : "—";
+            this.run2 = runCount >= 2 ? format(runTimes[1]) : "—";
+            this.run3 = runCount >= 3 ? format(runTimes[2]) : "—";
+            this.averageValue = averageValue;
+            this.average = format(averageValue);
+            this.minimumValue = minimumValue;
+            this.minimum = format(minimumValue);
+            this.maximumValue = maximumValue;
             this.maximum = format(maximumValue);
         }
 
