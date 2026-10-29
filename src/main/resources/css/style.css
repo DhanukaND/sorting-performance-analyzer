@@ -213,9 +213,6 @@
     -fx-icon-color: #DC2626;
 }
 
-<<<<<<< HEAD
-/* ========================================*/
-
 .run-screen {
     -fx-background-color: transparent;
 }
@@ -269,9 +266,6 @@
 /* ===== Column combo box ===== */
 
 /* the closed box */
-=======
-/* ========= COLUMN SELECTION ========= */
->>>>>>> parent of 23cc64a (Merge branch 'feature/ui-performance' into dev)
 .column-combo {
     -fx-background-color: #EFF6FF;
     -fx-background-insets: 0;
