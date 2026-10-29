@@ -213,9 +213,6 @@
     -fx-icon-color: #DC2626;
 }
 
-<<<<<<< HEAD
-/* ========================================*/
-
 .run-screen {
     -fx-background-color: transparent;
 }
@@ -269,9 +266,6 @@
 /* ===== Column combo box ===== */
 
 /* the closed box */
-=======
-/* ========= COLUMN SELECTION ========= */
->>>>>>> parent of 23cc64a (Merge branch 'feature/ui-performance' into dev)
 .column-combo {
     -fx-background-color: #EFF6FF;
     -fx-background-insets: 0;
@@ -445,6 +439,255 @@
 .preview-table .corner {
     -fx-background-color: transparent;
 }
+
+
+/* ================= CSS FOR RUN ALGORITHMS SCREEN ================= */
+
+.run-algorithms-root {
+    -fx-background-color: transparent;
+}
+
+.run-main-card {
+    -fx-background-color: rgba(255,255,255,0.93);
+    -fx-background-radius: 14;
+    -fx-border-color: #D8E5F4;
+    -fx-border-radius: 14;
+    -fx-border-width: 1;
+    -fx-padding: 12 16 12 16;
+    -fx-effect: dropshadow(gaussian, rgba(30,64,175,0.10), 12, 0, 0, 3);
+}
+
+/* ----- Header ----- */
+.run-header {
+    -fx-padding: 0 0 0 4;
+}
+
+.header-icon-box {
+    -fx-background-color: linear-gradient(to bottom right, #2563EB, #0D6EFD);
+    -fx-background-radius: 11;
+    -fx-pref-width: 48;
+    -fx-pref-height: 48;
+    -fx-min-width: 48;
+    -fx-min-height: 48;
+    -fx-max-width: 48;
+    -fx-max-height: 48;
+    -fx-effect: dropshadow(gaussian, rgba(37,99,235,0.30), 8, 0, 0, 2);
+}
+
+.header-icon {
+    -fx-icon-color: white;
+}
+
+.page-title {
+    -fx-text-fill: #0F1E5B;
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+}
+
+.page-subtitle {
+    -fx-text-fill: #475569;
+    -fx-font-size: 12px;
+}
+
+/* ----- Inner panels ----- */
+.panel-card {
+    -fx-background-color: rgba(255,255,255,0.80);
+    -fx-background-radius: 12;
+    -fx-border-color: #DCE7F4;
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-padding: 10 14 12 14;
+}
+
+.panel-icon-box {
+    -fx-background-color: #DBEAFE;
+    -fx-background-radius: 9;
+    -fx-pref-width: 36;
+    -fx-pref-height: 36;
+    -fx-min-width: 36;
+    -fx-min-height: 36;
+    -fx-max-width: 36;
+    -fx-max-height: 36;
+}
+
+.panel-icon {
+    -fx-icon-color: #2563EB;
+}
+
+.panel-title {
+    -fx-text-fill: #0F1E5B;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+}
+
+.panel-subtitle {
+    -fx-text-fill: #475569;
+    -fx-font-size: 11.5px;
+}
+
+/* ----- Algorithm cards ----- */
+.algorithm-row {
+    -fx-padding: 2 0 0 0;
+}
+
+.algorithm-card {
+    -fx-background-color: rgba(255,255,255,0.90);
+    -fx-background-radius: 12;
+    -fx-border-color: #DCE7F4;
+    -fx-border-radius: 12;
+    -fx-border-width: 1;
+    -fx-alignment: TOP_CENTER;
+    -fx-spacing: 4;
+    -fx-padding: 10 10 8 12;
+    -fx-cursor: hand;
+}
+
+.algorithm-card:hover {
+    -fx-background-color: #F5F9FF;
+    -fx-border-color: #93C5FD;
+}
+
+.algorithm-check-row {
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 0 0 0 2;
+}
+
+.algorithm-check .box {
+    -fx-background-color: white;
+    -fx-background-insets: 0;
+    -fx-background-radius: 5;
+    -fx-border-color: #94A3B8;
+    -fx-border-radius: 5;
+    -fx-border-width: 1.5;
+    -fx-padding: 0.2em 0.28em 0.2em 0.28em;
+}
+
+.algorithm-check:selected .box {
+    -fx-background-color: #2563EB;
+    -fx-border-color: #2563EB;
+}
+
+.algorithm-check .mark {
+    -fx-background-color: transparent;
+}
+
+.algorithm-check:selected .mark {
+    -fx-background-color: white;
+}
+
+/* Icon circles: one class per element, shared look via selector lists */
+.algorithm-icon-merge,
+.algorithm-icon-quick,
+.algorithm-icon-insertion,
+.algorithm-icon-shell,
+.algorithm-icon-heap {
+    -fx-background-radius: 30;
+    -fx-pref-width: 44;
+    -fx-pref-height: 44;
+    -fx-min-width: 44;
+    -fx-min-height: 44;
+    -fx-max-width: 44;
+    -fx-max-height: 44;
+}
+
+.algorithm-icon-merge     { -fx-background-color: #DBEAFE; }
+.algorithm-icon-quick     { -fx-background-color: #FEE2E2; }
+.algorithm-icon-insertion { -fx-background-color: #DCFCE7; }
+.algorithm-icon-shell     { -fx-background-color: #FFEDD5; }
+.algorithm-icon-heap      { -fx-background-color: #EDE9FE; }
+
+.algorithm-icon-merge .ikonli-font-icon     { -fx-icon-color: #2563EB; }
+.algorithm-icon-quick .ikonli-font-icon     { -fx-icon-color: #DC2626; }
+.algorithm-icon-insertion .ikonli-font-icon { -fx-icon-color: #16A34A; }
+.algorithm-icon-shell .ikonli-font-icon     { -fx-icon-color: #F97316; }
+.algorithm-icon-heap .ikonli-font-icon      { -fx-icon-color: #7C3AED; }
+
+.algorithm-name {
+    -fx-text-fill: #0F1E5B;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.algorithm-description {
+    -fx-text-fill: #64748B;
+    -fx-font-size: 11px;
+    -fx-text-alignment: center;
+}
+
+/* ----- Execution settings ----- */
+.settings-row {
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 0 4 0 4;
+}
+
+.settings-column {
+    -fx-alignment: TOP_LEFT;
+}
+
+.settings-divider {
+    -fx-background-color: #DCE7F4;
+}
+
+.settings-label {
+    -fx-text-fill: #0F1E5B;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.settings-hint {
+    -fx-text-fill: #64748B;
+    -fx-font-size: 11.5px;
+}
+
+.settings-spinner {
+    -fx-background-color: white;
+    -fx-background-insets: 0;
+    -fx-background-radius: 8;
+    -fx-border-color: #CBD5E1;
+    -fx-border-radius: 8;
+    -fx-border-width: 1;
+    -fx-pref-height: 34;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.settings-spinner:focused {
+    -fx-border-color: #2563EB;
+}
+
+.settings-spinner .text-field {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0 0 0 10;
+    -fx-text-fill: #0F1E5B;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+}
+
+.settings-spinner .increment-arrow-button,
+.settings-spinner .decrement-arrow-button {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-cursor: hand;
+}
+
+.settings-spinner .increment-arrow-button:hover,
+.settings-spinner .decrement-arrow-button:hover {
+    -fx-background-color: #EFF6FF;
+}
+
+.settings-spinner .increment-arrow,
+.settings-spinner .decrement-arrow {
+    -fx-background-color: #475569;
+}
+
+.validation-error {
+    -fx-text-fill: #DC2626;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
 
 /* ========= CSS for RESULTS SCREEN ========*/
 

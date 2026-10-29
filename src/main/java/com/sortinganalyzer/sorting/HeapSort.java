@@ -1,6 +1,6 @@
 package com.sortinganalyzer.sorting;
 
-public class HeapSort {
+public class HeapSort implements Sorter {
 
     public void sort(int[] values) {
         if (values == null || values.length < 2) return;
@@ -16,6 +16,7 @@ public class HeapSort {
         }
     }
 
+    @Override
     public void sort(double[] values) {
         if (values == null || values.length < 2) return;
         int n = values.length;

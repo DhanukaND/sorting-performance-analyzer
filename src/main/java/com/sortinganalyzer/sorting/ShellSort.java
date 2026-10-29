@@ -1,6 +1,6 @@
 package com.sortinganalyzer.sorting;
 
-public class ShellSort {
+public class ShellSort implements Sorter {
 
     public void sort(int[] values) {
         if (values == null || values.length < 2) return;
@@ -19,6 +19,7 @@ public class ShellSort {
         }
     }
 
+    @Override
     public void sort(double[] values) {
         if (values == null || values.length < 2) return;
         int gap = values.length / 2;

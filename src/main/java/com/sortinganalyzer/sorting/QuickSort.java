@@ -1,12 +1,13 @@
 package com.sortinganalyzer.sorting;
 
-public class QuickSort {
+public class QuickSort implements Sorter {
 
     public void sort(int[] values) {
         if (values == null || values.length < 2) return;
         quickSort(values, 0, values.length - 1);
     }
 
+    @Override
     public void sort(double[] values) {
         if (values == null || values.length < 2) return;
         quickSort(values, 0, values.length - 1);
