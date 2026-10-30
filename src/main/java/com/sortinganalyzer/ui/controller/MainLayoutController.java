@@ -7,6 +7,8 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import org.kordamp.ikonli.javafx.FontIcon;
+
 import java.io.IOException;
 
 public class MainLayoutController {
@@ -46,6 +48,7 @@ public class MainLayoutController {
             nextButton.disableProperty().unbind();
             nextButton.setDisable(false);
             nextButton.setText(index == SCREENS.length - 1 ? "Finish" : "Next");
+            setNextIcon("fas-arrow-right");          // reset to the default arrow
             extraActions.getChildren().clear();
             backButton.setVisible(index > 0);
             backButton.setManaged(index > 0);
@@ -55,6 +58,7 @@ public class MainLayoutController {
                 currentStep = step;
                 extraActions.getChildren().setAll(step.getExtraButtons());
                 nextButton.setText(step.getNextText());
+                setNextIcon(step.getNextIcon());
                 nextButton.disableProperty().bind(Bindings.not(step.canProceed()));
             } else {
                 currentStep = null;
@@ -72,10 +76,25 @@ public class MainLayoutController {
         }
     }
 
+    private void setNextIcon(String iconLiteral) {
+        if (nextButton.getGraphic() instanceof FontIcon icon) {
+            icon.setIconLiteral(iconLiteral);
+        }
+    }
+
     @FXML
     private void handleNext() {
         if (currentStep != null && !currentStep.onNext()) return;
-        if (index < SCREENS.length - 1) show(index + 1);
+        if (index < SCREENS.length - 1) {
+            show(index + 1);
+        } else {
+            startNewAnalysis();   // last screen: the button restarts the wizard
+        }
+    }
+
+    private void startNewAnalysis() {
+        WizardState.get().reset();
+        show(0);
     }
 
     @FXML
