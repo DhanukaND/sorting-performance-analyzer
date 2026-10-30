@@ -17,6 +17,9 @@ public interface WizardStep {
     /** Text of the Next button for this screen. */
     default String getNextText() { return "Next"; }
 
+    /** Ikonli literal for the icon on the Next button for this screen. */
+    default String getNextIcon() { return "fas-arrow-right"; }
+
     /** Called when Next is clicked. Return false to block moving on. */
     default boolean onNext() { return true; }
 }

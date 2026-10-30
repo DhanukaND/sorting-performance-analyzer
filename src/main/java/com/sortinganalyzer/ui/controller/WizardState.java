@@ -84,4 +84,16 @@ public class WizardState {
         algorithmResults.set(results == null ? List.of() : List.copyOf(results));
     }
 
+    /** Clears everything so the wizard can start again from step 1. */
+    public void reset() {
+        selectedFile.set(null);
+        selectedColumn.set(null);
+        selectedColumnIndex.set(-1);
+        selectedColumnValues.set(List.of());
+        datasetSize.set(0);
+        runCount.set(DEFAULT_RUNS);
+        selectedAlgorithms.set(ALL_ALGORITHMS);
+        algorithmResults.set(List.of());
+    }
+
 }
