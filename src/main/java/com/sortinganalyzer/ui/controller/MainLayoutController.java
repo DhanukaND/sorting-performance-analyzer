@@ -34,8 +34,6 @@ public class MainLayoutController {
         show(0);
     }
 
-    public int getIndex() { return index; }
-
     public void show(int newIndex) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(SCREENS[newIndex]));

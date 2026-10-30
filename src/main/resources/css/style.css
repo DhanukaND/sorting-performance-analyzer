@@ -157,10 +157,6 @@
     -fx-font-weight: bold;
 }
 
-.file-icon {
-    -fx-icon-color: #2563EB;
-}
-
 .change-file-button {
     -fx-background-color: white;
     -fx-text-fill: #2563EB;
@@ -211,24 +207,6 @@
 
 .remove-file-button .ikonli-font-icon {
     -fx-icon-color: #DC2626;
-}
-
-.run-screen {
-    -fx-background-color: transparent;
-}
-
-.run-card {
-    -fx-background-color: rgba(255,255,255,0.93);
-    -fx-background-radius: 12;
-    -fx-border-color: #D8E5F4;
-    -fx-border-radius: 12;
-    -fx-effect: dropshadow(gaussian, rgba(30,64,175,0.10), 12, 0, 0, 3);
-}
-
-.run-label {
-    -fx-text-fill: #0F1E5B;
-    -fx-font-size: 13px;
-    -fx-font-weight: bold;
 }
 
 .run-count-box {

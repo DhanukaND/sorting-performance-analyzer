@@ -170,26 +170,11 @@ public class ColumnSelectionController implements WizardStep {
                     : "Showing all " + shown + " rows");
             datasetSizeLabel.setText(totalRows + " rows × " + headers.size() + " columns");
 
-            WizardState.get().setParsedRows(readAllRows(csv));
-
         } catch (IOException | RuntimeException e) {
             e.printStackTrace();
             clearPreview();
             previewSubtitle.setText("Could not read the file");
         }
-    }
-
-    private List<List<String>> readAllRows(File csv) {
-        List<List<String>> allRows = new ArrayList<>();
-        try (Reader in = Files.newBufferedReader(csv.toPath());
-             CSVParser parser = CSVFormat.DEFAULT.builder().setIgnoreEmptyLines(true).build().parse(in)) {
-            for (CSVRecord record : parser) {
-                allRows.add(new ArrayList<>(record.toList()));
-            }
-        } catch (IOException e) {
-            return List.of();
-        }
-        return allRows;
     }
 
     private List<Double> readSelectedColumnValues(File csv, int columnIndex) {

@@ -55,7 +55,6 @@ public class WizardState {
     private final ObjectProperty<File> selectedFile = new SimpleObjectProperty<>();
     private final StringProperty selectedColumn = new SimpleStringProperty();
     private final IntegerProperty selectedColumnIndex = new SimpleIntegerProperty(-1);
-    private final ObjectProperty<List<List<String>>> parsedRows = new SimpleObjectProperty<>(List.of());
     private final ObjectProperty<List<Double>> selectedColumnValues = new SimpleObjectProperty<>(List.of());
     private final IntegerProperty datasetSize = new SimpleIntegerProperty(0);
     private final IntegerProperty runCount = new SimpleIntegerProperty(DEFAULT_RUNS);
@@ -67,16 +66,11 @@ public class WizardState {
     public ObjectProperty<File> selectedFileProperty() { return selectedFile; }
     public StringProperty selectedColumnProperty() { return selectedColumn; }
     public IntegerProperty selectedColumnIndexProperty() { return selectedColumnIndex; }
-    public ObjectProperty<List<List<String>>> parsedRowsProperty() { return parsedRows; }
     public ObjectProperty<List<Double>> selectedColumnValuesProperty() { return selectedColumnValues; }
     public IntegerProperty datasetSizeProperty() { return datasetSize; }
     public IntegerProperty runCountProperty() { return runCount; }
     public ObjectProperty<List<String>> selectedAlgorithmsProperty() { return selectedAlgorithms; }
     public ObjectProperty<List<AlgorithmResult>> algorithmResultsProperty() { return algorithmResults; }
-
-    public void setParsedRows(List<List<String>> rows) {
-        parsedRows.set(rows == null ? List.of() : List.copyOf(rows));
-    }
 
     public void setSelectedColumnValues(List<Double> values) {
         selectedColumnValues.set(values == null ? List.of() : List.copyOf(values));
@@ -90,15 +84,4 @@ public class WizardState {
         algorithmResults.set(results == null ? List.of() : List.copyOf(results));
     }
 
-    public void reset() {
-        selectedFile.set(null);
-        selectedColumn.set(null);
-        selectedColumnIndex.set(-1);
-        parsedRows.set(List.of());
-        selectedColumnValues.set(List.of());
-        datasetSize.set(0);
-        runCount.set(DEFAULT_RUNS);
-        selectedAlgorithms.set(ALL_ALGORITHMS);
-        algorithmResults.set(List.of());
-    }
 }
